@@ -2,88 +2,293 @@
 <html lang="fa" dir="rtl">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LA3 Cyber Security</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LA3 Cyber Security</title>
+
+<link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
-    <!-- صفحه ورود -->
-    <div id="login-screen">
-        <div class="login-box">
-            <h2>ورود به سیستم</h2>
 
-            <input
-                type="password"
-                id="password"
-                placeholder="رمز عبور">
+<!-- صفحه ورود اصلی -->
 
-            <button id="toggle">نمایش / مخفی</button>
+<div id="login-screen">
 
-            <button id="loginBtn">ورود</button>
+<div class="login-box">
 
-            <p id="message"></p>
-            <p id="countdown"></p>
-        </div>
-    </div>
+<h2>ورود به سیستم</h2>
 
-    <!-- سایت -->
-    <div id="site">
 
-        <header>
-            <h1>LA3 Cyber Security</h1>
-        </header>
+<input
+type="password"
+id="password"
+placeholder="رمز عبور">
 
-        <main>
 
-            <h2>خوش آمدید</h2>
+<button id="toggle">
+نمایش / مخفی
+</button>
 
-            <button id="membersBtn">اعضا تیم</button>
 
-        </main>
+<button id="loginBtn">
+ورود
+</button>
 
-    </div>
 
-    <!-- صفحه اعضای تیم -->
-    <div id="membersPage">
+<p id="message"></p>
 
-        <h2>اعضا تیم</h2>
+<p id="countdown"></p>
 
-        <table>
 
-            <tr>
-                <th>نام اعضا</th>
-            </tr>
+</div>
 
-            <tr>
-                <td>سید علی اصغر</td>
-            </tr>
+</div>
 
-            <tr>
-                <td>سید علی موسوی</td>
-            </tr>
 
-            <tr>
-                <td>محمد</td>
-            </tr>
 
-            <tr>
-                <td>طاها زالی</td>
-            </tr>
 
-            <tr>
-                <td>سعدی</td>
-            </tr>
 
-        </table>
+<!-- سایت -->
 
-        <button id="backBtn">بازگشت</button>
+<div id="site">
 
-    </div>
 
-    <script src="script.js"></script>
+<header>
+
+<h1>
+LA3 Cyber Security
+</h1>
+
+</header>
+
+
+
+<main>
+
+
+<h2>
+خوش آمدید
+</h2>
+
+
+<button id="membersBtn">
+اعضا تیم
+</button>
+
+
+<button id="chatBtn">
+💬 چتروم
+</button>
+
+
+
+</main>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- صفحه اعضای تیم -->
+
+
+<div id="membersPage">
+
+
+<h2>
+اعضا تیم
+</h2>
+
+
+
+<table>
+
+
+<tr>
+<th>
+نام اعضا
+</th>
+</tr>
+
+
+
+<tr>
+<td>
+سید علی اصغر
+</td>
+</tr>
+
+
+<tr>
+<td>
+سید علی موسوی
+</td>
+</tr>
+
+
+<tr>
+<td>
+محمد
+</td>
+</tr>
+
+
+<tr>
+<td>
+طاها زالی
+</td>
+</tr>
+
+
+<tr>
+<td>
+سعدی
+</td>
+</tr>
+
+
+
+</table>
+
+
+
+<button id="backBtn">
+بازگشت
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- ورود چتروم -->
+
+
+<div id="chatLogin">
+
+
+<div class="login-box">
+
+
+<h2>
+ورود به چتروم
+</h2>
+
+
+
+<input
+type="password"
+id="chatCode"
+placeholder="کد کاربری">
+
+
+
+<button id="chatEnter">
+ورود
+</button>
+
+
+
+<p id="chatMessage"></p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- صفحه چتروم -->
+
+
+<div id="chatRoom">
+
+
+<h2>
+💬 چتروم LA3
+</h2>
+
+
+
+<div id="messages">
+
+</div>
+
+
+
+
+<input
+id="chatText"
+placeholder="پیام خود را بنویسید">
+
+
+
+<button id="sendBtn">
+ارسال
+</button>
+
+
+
+
+<button id="clearChat">
+پاک کردن تاریخچه
+</button>
+
+
+
+<button id="exitChat">
+خروج
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+<!-- Firebase -->
+
+<script type="module">
+
+// بعداً اطلاعات Firebase اینجا قرار می‌گیرد
+
+</script>
+
+
+
+
+
+<script src="script.js"></script>
+
+
 
 </body>
+
 </html>
