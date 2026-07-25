@@ -1,5 +1,6 @@
 const PASSWORD = "_mamad_13900_";
 
+// عناصر
 const loginScreen = document.getElementById("login-screen");
 const site = document.getElementById("site");
 const membersPage = document.getElementById("membersPage");
@@ -14,124 +15,119 @@ const backBtn = document.getElementById("backBtn");
 const message = document.getElementById("message");
 const countdown = document.getElementById("countdown");
 
-let attempts = 0;
-let locked = false;
-
+// شروع
 site.style.display = "none";
 membersPage.style.display = "none";
 
-// نمایش / مخفی کردن رمز
-toggle.onclick = function(){
+let attempts = 0;
+let locked = false;
 
-    if(password.type === "password"){
+// نمایش و مخفی کردن رمز
+toggle.onclick = function () {
 
+    if (password.type === "password") {
         password.type = "text";
         toggle.innerHTML = "🙈";
-
-    }else{
-
+    } else {
         password.type = "password";
         toggle.innerHTML = "👁";
-
     }
 
 };
 
 // ورود با Enter
-password.addEventListener("keydown",function(e){
+password.addEventListener("keydown", function (e) {
 
-    if(e.key==="Enter"){
-
+    if (e.key === "Enter") {
         login();
-
     }
 
 });
 
+// دکمه ورود
 loginBtn.onclick = login;
 
-function login(){
+// تابع ورود
+function login() {
 
-    if(locked) return;
+    if (locked) return;
 
-    if(password.value===PASSWORD){
+    if (password.value === PASSWORD) {
 
-        message.style.color="#00ff66";
-        message.innerHTML="ACCESS GRANTED";
+        message.style.color = "#00ff66";
+        message.innerHTML = "ACCESS GRANTED";
 
-        setTimeout(function(){
+        setTimeout(function () {
 
-            loginScreen.style.display="none";
-            site.style.display="block";
-            membersPage.style.display="none";
+            loginScreen.style.display = "none";
+            site.style.display = "block";
 
-            startMatrix();
+        }, 1000);
 
-        },1000);
-
-    }else{
+    } else {
 
         attempts++;
 
-        message.style.color="red";
-        message.innerHTML="ACCESS DENIED";
+        message.style.color = "red";
+        message.innerHTML = "ACCESS DENIED";
 
-        password.value="";
+        password.value = "";
 
-        if(attempts>=3){
-
+        if (attempts >= 3) {
             lockLogin();
-
         }
 
     }
 
 }
 
-function lockLogin(){
+// قفل شدن
+function lockLogin() {
 
-    locked=true;
+    locked = true;
 
-    loginBtn.disabled=true;
-    password.disabled=true;
+    loginBtn.disabled = true;
+    password.disabled = true;
 
-    let sec=30;
+    let sec = 30;
 
-    countdown.innerHTML="Locked : "+sec+" s";
+    countdown.innerHTML = "Locked : " + sec + " s";
 
-    const timer=setInterval(function(){
+    const timer = setInterval(function () {
 
         sec--;
 
-        countdown.innerHTML="Locked : "+sec+" s";
+        countdown.innerHTML = "Locked : " + sec + " s";
 
-        if(sec<=0){
+        if (sec <= 0) {
 
             clearInterval(timer);
 
-            attempts=0;
+            attempts = 0;
+            locked = false;
 
-            locked=false;
+            loginBtn.disabled = false;
+            password.disabled = false;
 
-            loginBtn.disabled=false;
-            password.disabled=false;
-
-            countdown.innerHTML="";
-            message.innerHTML="";
+            countdown.innerHTML = "";
+            message.innerHTML = "";
 
         }
 
-    },1000);
-// صفحه اعضای تیم
+    }, 1000);
 
-membersBtn.onclick = function(){
+}
+
+// صفحه اعضای تیم
+membersBtn.onclick = function () {
 
     site.style.display = "none";
     membersPage.style.display = "block";
 
 };
 
-backBtn.onclick = function(){
+// بازگشت
+backBtn.onclick = function () {
 
     membersPage.style.display = "none";
     site.style.display = "block";
@@ -139,93 +135,6 @@ backBtn.onclick = function(){
 };
 
 // جلوگیری از راست کلیک
-
-document.addEventListener("contextmenu",function(e){
-
+document.addEventListener("contextmenu", function (e) {
     e.preventDefault();
-
 });
-
-// ===== Matrix =====
-
-function startMatrix(){
-
-const canvas=document.getElementById("c");
-
-if(!canvas) return;
-
-const ctx=canvas.getContext("2d");
-
-function resize(){
-
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-
-}
-
-resize();
-
-window.onresize=resize;
-
-const letters="アイウエオカキクケコABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-const size=16;
-
-const columns=Math.floor(canvas.width/size);
-
-const drops=[];
-
-for(let i=0;i<columns;i++){
-
-drops[i]=1;
-
-}
-
-function draw(){
-
-ctx.fillStyle="rgba(0,0,0,.08)";
-ctx.fillRect(0,0,canvas.width,canvas.height);
-
-ctx.fillStyle="#00ff66";
-ctx.font=size+"px monospace";
-
-for(let i=0;i<drops.length;i++){
-
-const text=letters[Math.floor(Math.random()*letters.length)];
-
-ctx.fillText(text,i*size,drops[i]*size);
-
-if(drops[i]*size>canvas.height && Math.random()>0.98){
-
-drops[i]=0;
-
-}
-
-drops[i]++;
-
-}
-
-requestAnimationFrame(draw);
-
-}
-
-draw();
-
-            }
-}
-// فعال سازی صفحه اعضا
-
-document.getElementById("membersBtn").onclick = function(){
-
-    document.getElementById("site").style.display = "none";
-    document.getElementById("membersPage").style.display = "block";
-
-};
-
-
-document.getElementById("backBtn").onclick = function(){
-
-    document.getElementById("membersPage").style.display = "none";
-    document.getElementById("site").style.display = "block";
-
-};
