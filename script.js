@@ -1,6 +1,5 @@
 const PASSWORD = "_mamad_13900_";
 
-// عناصر
 const loginScreen = document.getElementById("login-screen");
 const site = document.getElementById("site");
 const membersPage = document.getElementById("membersPage");
@@ -15,41 +14,32 @@ const backBtn = document.getElementById("backBtn");
 const message = document.getElementById("message");
 const countdown = document.getElementById("countdown");
 
+let attempts = 0;
+let locked = false;
 
-// شروع
 site.style.display = "none";
 membersPage.style.display = "none";
 
 
-let attempts = 0;
-let locked = false;
+// نمایش رمز
+toggle.onclick = function(){
 
-
-// نمایش و مخفی کردن رمز
-toggle.onclick = function () {
-
-    if (password.type === "password") {
-
+    if(password.type === "password"){
         password.type = "text";
         toggle.innerHTML = "🙈";
-
-    } else {
-
+    }else{
         password.type = "password";
         toggle.innerHTML = "👁";
-
     }
 
 };
 
 
 // ورود با Enter
-password.addEventListener("keydown", function(e){
+password.addEventListener("keydown",function(e){
 
     if(e.key === "Enter"){
-
         login();
-
     }
 
 });
@@ -59,7 +49,7 @@ password.addEventListener("keydown", function(e){
 loginBtn.onclick = login;
 
 
-// ورود
+
 function login(){
 
     if(locked) return;
@@ -67,33 +57,34 @@ function login(){
 
     if(password.value === PASSWORD){
 
-        message.style.color = "#00ff66";
-        message.innerHTML = "ACCESS GRANTED";
+        message.style.color="#00ff66";
+        message.innerHTML="در حال ورود...";
+
+
+        loginBtn.disabled=true;
 
 
         setTimeout(function(){
 
-            loginScreen.style.display = "none";
-            site.style.display = "block";
+            loginScreen.style.display="none";
+            site.style.display="block";
 
-        },1000);
+        },1200);
+
 
 
     }else{
 
-
         attempts++;
 
-        message.style.color = "red";
-        message.innerHTML = "ACCESS DENIED";
+        message.style.color="red";
+        message.innerHTML="رمز اشتباه است";
 
-        password.value = "";
+        password.value="";
 
 
-        if(attempts >= 3){
-
+        if(attempts>=3){
             lockLogin();
-
         }
 
     }
@@ -101,47 +92,41 @@ function login(){
 }
 
 
-// قفل شدن
+
+
 function lockLogin(){
 
-    locked = true;
+    locked=true;
 
-    loginBtn.disabled = true;
-    password.disabled = true;
-
-
-    let sec = 30;
+    loginBtn.disabled=true;
+    password.disabled=true;
 
 
-    countdown.innerHTML = "Locked : " + sec + " s";
+    let sec=30;
 
 
-    const timer = setInterval(function(){
+    countdown.innerHTML="تلاش دوباره: "+sec;
 
+
+    let timer=setInterval(function(){
 
         sec--;
 
+        countdown.innerHTML="تلاش دوباره: "+sec;
 
-        countdown.innerHTML = "Locked : " + sec + " s";
 
-
-        if(sec <= 0){
-
+        if(sec<=0){
 
             clearInterval(timer);
 
+            attempts=0;
+            locked=false;
 
-            attempts = 0;
-            locked = false;
+            loginBtn.disabled=false;
+            password.disabled=false;
 
-
-            loginBtn.disabled = false;
-            password.disabled = false;
-
-
-            countdown.innerHTML = "";
-            message.innerHTML = "";
-
+            countdown.innerHTML="";
+            message.innerHTML="";
 
         }
 
@@ -151,49 +136,48 @@ function lockLogin(){
 }
 
 
-// ورود به صفحه اعضای تیم
-membersBtn.onclick = function(){
 
 
-    membersBtn.innerHTML = "در حال ورود...";
+// رفتن به صفحه اعضا
 
-    membersBtn.disabled = true;
+membersBtn.onclick=function(){
+
+    membersBtn.innerHTML="در حال ورود...";
+
+    membersBtn.disabled=true;
 
 
     setTimeout(function(){
 
+        site.style.display="none";
 
-        site.style.display = "none";
+        membersPage.style.display="block";
 
-        membersPage.style.display = "block";
+        membersBtn.innerHTML="اعضا تیم";
 
-
-        membersBtn.innerHTML = "اعضا تیم";
-
-        membersBtn.disabled = false;
+        membersBtn.disabled=false;
 
 
     },1200);
-
 
 };
 
 
 
-// بازگشت
-backBtn.onclick = function(){
+// برگشت
 
+backBtn.onclick=function(){
 
-    membersPage.style.display = "none";
+    membersPage.style.display="none";
 
-    site.style.display = "block";
-
+    site.style.display="block";
 
 };
 
 
 
 // جلوگیری از راست کلیک
+
 document.addEventListener("contextmenu",function(e){
 
     e.preventDefault();
