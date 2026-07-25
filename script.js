@@ -213,3 +213,19 @@ draw();
 
             }
 }
+// فعال سازی صفحه اعضا
+
+document.getElementById("membersBtn").onclick = function(){
+
+    document.getElementById("site").style.display = "none";
+    document.getElementById("membersPage").style.display = "block";
+
+};
+
+
+document.getElementById("backBtn").onclick = function(){
+
+    document.getElementById("membersPage").style.display = "none";
+    document.getElementById("site").style.display = "block";
+
+};
