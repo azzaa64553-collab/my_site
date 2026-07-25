@@ -2,10 +2,14 @@ const PASSWORD = "_mamad_13900_";
 
 const loginScreen = document.getElementById("login-screen");
 const site = document.getElementById("site");
+const membersPage = document.getElementById("membersPage");
 
 const password = document.getElementById("password");
 const loginBtn = document.getElementById("loginBtn");
 const toggle = document.getElementById("toggle");
+
+const membersBtn = document.getElementById("membersBtn");
+const backBtn = document.getElementById("backBtn");
 
 const message = document.getElementById("message");
 const countdown = document.getElementById("countdown");
@@ -13,8 +17,8 @@ const countdown = document.getElementById("countdown");
 let attempts = 0;
 let locked = false;
 
-// اول سایت اصلی مخفی باشد
 site.style.display = "none";
+membersPage.style.display = "none";
 
 // نمایش / مخفی کردن رمز
 toggle.onclick = function(){
@@ -59,6 +63,7 @@ function login(){
 
             loginScreen.style.display="none";
             site.style.display="block";
+            membersPage.style.display="none";
 
             startMatrix();
 
@@ -117,10 +122,24 @@ function lockLogin(){
         }
 
     },1000);
+// صفحه اعضای تیم
 
-}
+membersBtn.onclick = function(){
+
+    site.style.display = "none";
+    membersPage.style.display = "block";
+
+};
+
+backBtn.onclick = function(){
+
+    membersPage.style.display = "none";
+    site.style.display = "block";
+
+};
 
 // جلوگیری از راست کلیک
+
 document.addEventListener("contextmenu",function(e){
 
     e.preventDefault();
@@ -132,6 +151,9 @@ document.addEventListener("contextmenu",function(e){
 function startMatrix(){
 
 const canvas=document.getElementById("c");
+
+if(!canvas) return;
+
 const ctx=canvas.getContext("2d");
 
 function resize(){
@@ -189,4 +211,5 @@ requestAnimationFrame(draw);
 
 draw();
 
-  }
+            }
+}
