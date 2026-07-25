@@ -15,56 +15,72 @@ const backBtn = document.getElementById("backBtn");
 const message = document.getElementById("message");
 const countdown = document.getElementById("countdown");
 
+
 // شروع
 site.style.display = "none";
 membersPage.style.display = "none";
 
+
 let attempts = 0;
 let locked = false;
+
 
 // نمایش و مخفی کردن رمز
 toggle.onclick = function () {
 
     if (password.type === "password") {
+
         password.type = "text";
         toggle.innerHTML = "🙈";
+
     } else {
+
         password.type = "password";
         toggle.innerHTML = "👁";
+
     }
 
 };
 
-// ورود با Enter
-password.addEventListener("keydown", function (e) {
 
-    if (e.key === "Enter") {
+// ورود با Enter
+password.addEventListener("keydown", function(e){
+
+    if(e.key === "Enter"){
+
         login();
+
     }
 
 });
 
+
 // دکمه ورود
 loginBtn.onclick = login;
 
-// تابع ورود
-function login() {
 
-    if (locked) return;
+// ورود
+function login(){
 
-    if (password.value === PASSWORD) {
+    if(locked) return;
+
+
+    if(password.value === PASSWORD){
 
         message.style.color = "#00ff66";
         message.innerHTML = "ACCESS GRANTED";
 
-        setTimeout(function () {
+
+        setTimeout(function(){
 
             loginScreen.style.display = "none";
             site.style.display = "block";
 
-        }, 1000);
+        },1000);
 
-    } else {
+
+    }else{
+
 
         attempts++;
 
@@ -73,68 +89,113 @@ function login() {
 
         password.value = "";
 
-        if (attempts >= 3) {
+
+        if(attempts >= 3){
+
             lockLogin();
+
         }
 
     }
 
 }
 
+
 // قفل شدن
-function lockLogin() {
+function lockLogin(){
 
     locked = true;
 
     loginBtn.disabled = true;
     password.disabled = true;
 
+
     let sec = 30;
+
 
     countdown.innerHTML = "Locked : " + sec + " s";
 
-    const timer = setInterval(function () {
+
+    const timer = setInterval(function(){
+
 
         sec--;
 
+
         countdown.innerHTML = "Locked : " + sec + " s";
 
-        if (sec <= 0) {
+
+        if(sec <= 0){
+
 
             clearInterval(timer);
+
 
             attempts = 0;
             locked = false;
 
+
             loginBtn.disabled = false;
             password.disabled = false;
+
 
             countdown.innerHTML = "";
             message.innerHTML = "";
 
+
         }
 
-    }, 1000);
+
+    },1000);
 
 }
 
-// صفحه اعضای تیم
-membersBtn.onclick = function () {
 
-    site.style.display = "none";
-    membersPage.style.display = "block";
+// ورود به صفحه اعضای تیم
+membersBtn.onclick = function(){
+
+
+    membersBtn.innerHTML = "در حال ورود...";
+
+    membersBtn.disabled = true;
+
+
+    setTimeout(function(){
+
+
+        site.style.display = "none";
+
+        membersPage.style.display = "block";
+
+
+        membersBtn.innerHTML = "اعضا تیم";
+
+        membersBtn.disabled = false;
+
+
+    },1200);
+
 
 };
+
+
 
 // بازگشت
-backBtn.onclick = function () {
+backBtn.onclick = function(){
+
 
     membersPage.style.display = "none";
+
     site.style.display = "block";
+
 
 };
 
+
+
 // جلوگیری از راست کلیک
-document.addEventListener("contextmenu", function (e) {
+document.addEventListener("contextmenu",function(e){
+
     e.preventDefault();
+
 });
