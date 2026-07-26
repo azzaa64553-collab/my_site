@@ -5,7 +5,9 @@ getDatabase,
 ref,
 push,
 onValue,
-remove
+remove,
+set,
+onDisconnect
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
 
@@ -139,10 +141,6 @@ const users = {
 
 
 };
-
-
-
-
 // نمایش رمز
 
 toggle.onclick=function(){
@@ -190,6 +188,7 @@ loginBtn.onclick=login;
 
 
 
+
 function login(){
 
 
@@ -214,6 +213,7 @@ site.style.display="block";
 
 
 },1200);
+
 
 
 }else{
@@ -294,6 +294,13 @@ message.innerHTML="";
 
 
 }
+
+
+
+
+
+
+
 // صفحه اعضا
 
 
@@ -320,6 +327,7 @@ site.style.display="block";
 
 
 
+
 // ورود به چتروم
 
 
@@ -337,13 +345,22 @@ chatLogin.style.display="flex";
 
 
 
-// نمایش اعضای ثبت شده داخل چتروم
+
+// نمایش اعضا با وضعیت آنلاین
 
 
 function showMembers(){
 
 
 if(!membersList) return;
+
+
+
+onValue(ref(db,"online"),(snapshot)=>{
+
+
+let onlineUsers = snapshot.val() || {};
+
 
 
 membersList.innerHTML = `
@@ -359,18 +376,28 @@ membersList.innerHTML = `
 for(let code in users){
 
 
+let status = onlineUsers[code] ? "🟢 آنلاین" : "⚫ آفلاین";
+
+
+
 membersList.innerHTML += `
 
 <div class="member-item">
 
-🟢 ${users[code]}
+${status} - ${users[code]}
 
 </div>
 
 `;
 
 
+
 }
+
+
+
+});
+
 
 
 }
@@ -401,6 +428,28 @@ currentName = users[code];
 
 
 
+// ثبت آنلاین بودن
+
+set(ref(db,"online/"+currentUser),{
+
+
+name: currentName,
+
+
+time: new Date().toLocaleTimeString("fa-IR")
+
+
+});
+
+
+
+// حذف خودکار هنگام خروج یا قطع اتصال
+
+onDisconnect(ref(db,"online/"+currentUser)).remove();
+
+
+
+
 chatLogin.style.display="none";
 
 chatRoom.style.display="block";
@@ -426,14 +475,6 @@ chatMessage.innerHTML="کد اشتباه است";
 
 
 };
-
-
-
-
-
-
-
-
 // ارسال پیام
 
 
@@ -540,7 +581,8 @@ let msg=item.val();
 
 
 
-let type = "";
+let type="";
+
 
 
 if(msg.user===currentUser){
@@ -556,6 +598,7 @@ type="other-message";
 
 
 }
+
 
 
 
@@ -596,6 +639,7 @@ ${msg.time}
 `;
 
 
+
 });
 
 
@@ -608,6 +652,15 @@ messages.scrollTop = messages.scrollHeight;
 
 
 }
+
+
+
+
+
+
+
+
+
 // پاک کردن تاریخچه فقط مدیر
 
 
@@ -615,6 +668,7 @@ clearChat.onclick=function(){
 
 
 if(currentUser==="modir12131213"){
+
 
 
 remove(ref(db,"chat"))
@@ -639,6 +693,7 @@ alert("خطا در پاک کردن چت");
 });
 
 
+
 }else{
 
 
@@ -657,10 +712,22 @@ alert("فقط مدیر اجازه پاک کردن دارد");
 
 
 
+
 // خروج از چتروم
 
 
 exitChat.onclick=function(){
+
+
+
+if(currentUser){
+
+
+remove(ref(db,"online/"+currentUser));
+
+
+}
+
 
 
 chatRoom.style.display="none";
@@ -685,6 +752,7 @@ currentName="";
 
 
 
+
 // جلوگیری از راست کلیک
 
 
@@ -695,3 +763,4 @@ e.preventDefault();
 
 
 });
+  
