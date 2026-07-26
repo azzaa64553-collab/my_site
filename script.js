@@ -1,10 +1,12 @@
 // ===============================
 // LA3 Cyber Security
-// Fixed Script Version
+// Final Fixed Script
+// Part 1
 // ===============================
 
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+
 
 import {
 getDatabase,
@@ -16,7 +18,10 @@ remove
 
 
 
+// ===============================
 // Firebase
+// ===============================
+
 
 const firebaseConfig = {
 
@@ -44,77 +49,77 @@ const db = getDatabase(app);
 
 
 
-
 // ===============================
-// Elements
-// ===============================
-
-
-const loginScreen=document.getElementById("login-screen");
-
-const password=document.getElementById("password");
-
-const toggle=document.getElementById("toggle");
-
-const loginBtn=document.getElementById("loginBtn");
-
-const message=document.getElementById("message");
-
-const site=document.getElementById("site");
-
-
-const membersBtn=document.getElementById("membersBtn");
-
-const membersPage=document.getElementById("membersPage");
-
-const backBtn=document.getElementById("backBtn");
-
-
-const chatBtn=document.getElementById("chatBtn");
-
-const chatLogin=document.getElementById("chatLogin");
-
-const chatCode=document.getElementById("chatCode");
-
-const chatEnter=document.getElementById("chatEnter");
-
-const chatMessage=document.getElementById("chatMessage");
-
-
-const chatRoom=document.getElementById("chatRoom");
-
-const currentUser=document.getElementById("currentUser");
-
-const membersList=document.getElementById("membersList");
-
-const messages=document.getElementById("messages");
-
-const chatText=document.getElementById("chatText");
-
-const sendBtn=document.getElementById("sendBtn");
-
-const clearChat=document.getElementById("clearChat");
-
-const exitChat=document.getElementById("exitChat");
-
-
-
-
-// ===============================
-// Password اصلی
+// Elements Safe
 // ===============================
 
 
-const PASSWORD="_mamad_13900_";
+const loginScreen = document.getElementById("login-screen");
+
+const password = document.getElementById("password");
+
+const toggle = document.getElementById("toggle");
+
+const loginBtn = document.getElementById("loginBtn");
+
+const message = document.getElementById("message");
+
+
+const site = document.getElementById("site");
+
+
+const membersBtn = document.getElementById("membersBtn");
+
+const membersPage = document.getElementById("membersPage");
+
+const backBtn = document.getElementById("backBtn");
+
+
+const chatBtn = document.getElementById("chatBtn");
+
+const chatLogin = document.getElementById("chatLogin");
+
+const chatCode = document.getElementById("chatCode");
+
+const chatEnter = document.getElementById("chatEnter");
+
+const chatMessage = document.getElementById("chatMessage");
+
+
+const chatRoom = document.getElementById("chatRoom");
+
+const currentUser = document.getElementById("currentUser");
+
+const membersList = document.getElementById("membersList");
+
+
+const messages = document.getElementById("messages");
+
+const chatText = document.getElementById("chatText");
+
+const sendBtn = document.getElementById("sendBtn");
+
+const clearChat = document.getElementById("clearChat");
+
+const exitChat = document.getElementById("exitChat");
 
 
 
 // ===============================
-// کد اعضا
+// Password
 // ===============================
 
 
-const users={
+const PASSWORD = "_mamad_13900_";
+
+
+
+// ===============================
+// Users Codes
+// ===============================
+
+
+const users = {
 
 
 "ali5678":"سید علی اصغر",
@@ -132,33 +137,39 @@ const users={
 
 
 
-let username="";
+let username = "";
 
-let isAdmin=false;
-
-
-
-
+let isAdmin = false;
 // ===============================
-// شروع
+// Initial State
 // ===============================
 
 
+if(site)
 site.style.display="none";
 
+
+if(membersPage)
 membersPage.style.display="none";
 
+
+if(chatLogin)
 chatLogin.style.display="none";
 
+
+if(chatRoom)
 chatRoom.style.display="none";
 
 
 
 
+
 // ===============================
-// نمایش رمز
+// Show / Hide Password
 // ===============================
 
+
+if(toggle){
 
 toggle.onclick=()=>{
 
@@ -182,13 +193,18 @@ toggle.innerText="نمایش";
 
 };
 
+}
+
 
 
 
 
 // ===============================
-// ورود اصلی
+// Main Login
 // ===============================
+
+
+if(loginBtn){
 
 
 loginBtn.onclick=()=>{
@@ -200,11 +216,15 @@ if(password.value===PASSWORD){
 message.innerText="ورود موفق ✅";
 
 
+
 setTimeout(()=>{
 
 
+if(loginScreen)
 loginScreen.style.display="none";
 
+
+if(site)
 site.style.display="block";
 
 
@@ -219,22 +239,30 @@ else{
 
 message.innerText="رمز اشتباه است ❌";
 
+
 password.value="";
 
 
 }
 
 
+
 };
 
 
+}
+
+
 
 
 
 
 // ===============================
-// اعضا
+// Members Page
 // ===============================
+
+
+if(membersBtn){
 
 
 membersBtn.onclick=()=>{
@@ -242,11 +270,19 @@ membersBtn.onclick=()=>{
 
 site.style.display="none";
 
+
 membersPage.style.display="block";
 
 
 };
 
+
+}
+
+
+
+
+if(backBtn){
 
 
 backBtn.onclick=()=>{
@@ -254,19 +290,27 @@ backBtn.onclick=()=>{
 
 membersPage.style.display="none";
 
+
 site.style.display="block";
 
 
 };
 
 
+}
+
+
+
 
 
 
 
 // ===============================
-// ورود چتروم
+// Open Chat Login
 // ===============================
+
+
+if(chatBtn){
 
 
 chatBtn.onclick=()=>{
@@ -274,59 +318,93 @@ chatBtn.onclick=()=>{
 
 site.style.display="none";
 
+
 chatLogin.style.display="flex";
 
 
 };
 
 
+}
 
+
+
+
+
+// ===============================
+// Enter Chat With Code
+// ===============================
+
+
+if(chatEnter){
 
 
 chatEnter.onclick=()=>{
 
 
-let code=chatCode.value.trim();
+let code = chatCode.value.trim();
 
 
 
 if(users[code]){
 
 
-username=users[code];
+
+username = users[code];
 
 
-isAdmin=(code==="modir12131213");
+isAdmin = (code==="modir12131213");
 
 
 
-localStorage.setItem("LA3user",username);
+localStorage.setItem(
+"LA3user",
+username
+);
 
 
 
 
 chatLogin.style.display="none";
 
+
 chatRoom.style.display="block";
 
 
 
-currentUser.innerText=
+
+if(currentUser){
+
+currentUser.innerText =
 "کاربر وارد شده: "+username;
 
+}
+
+
+
+
+
+if(clearChat){
 
 
 if(isAdmin){
 
 clearChat.style.display="inline-block";
 
+
 }
 
 else{
 
+
 clearChat.style.display="none";
 
+
 }
+
+
+}
+
 
 
 
@@ -339,7 +417,10 @@ loadMessages();
 else{
 
 
-chatMessage.innerText="کد اشتباه است ❌";
+if(chatMessage)
+
+chatMessage.innerText =
+"کد اشتباه است ❌";
 
 
 }
@@ -349,36 +430,39 @@ chatMessage.innerText="کد اشتباه است ❌";
 };
 
 
-
-
-
-
+ // ===============================
+// Send Message
 // ===============================
-// ارسال پیام
-// ===============================
+
+
+if(sendBtn){
 
 
 sendBtn.onclick=()=>{
 
 
-let text=chatText.value.trim();
-
-
-if(text==="") return;
+let text = chatText.value.trim();
 
 
 
-push(ref(db,"messages"),{
+if(text==="")
+return;
 
 
-name:username,
+
+push(
+ref(db,"messages"),
+{
+
+name: username,
 
 text:text,
 
 time:Date.now()
 
+}
 
-});
+);
 
 
 
@@ -388,21 +472,30 @@ chatText.value="";
 };
 
 
+}
+
+
 
 
 
 
 
 // ===============================
-// دریافت پیام
+// Load Messages
 // ===============================
 
 
 function loadMessages(){
 
 
+if(!messages)
+return;
 
-onValue(ref(db,"messages"),(snapshot)=>{
+
+
+onValue(
+ref(db,"messages"),
+(snapshot)=>{
 
 
 messages.innerHTML="";
@@ -412,12 +505,12 @@ messages.innerHTML="";
 snapshot.forEach((item)=>{
 
 
-
 let data=item.val();
 
 
 
 let div=document.createElement("div");
+
 
 
 div.className="chat-message";
@@ -442,23 +535,17 @@ div.classList.add("other-message");
 div.innerHTML=`
 
 <div class="username">
-
-${data.name}
-
+${data.name || "کاربر"}
 </div>
 
 
 <div class="text">
-
 ${data.text}
-
 </div>
 
 
 <div class="time">
-
 ${new Date(data.time).toLocaleString("fa-IR")}
-
 </div>
 
 `;
@@ -473,11 +560,14 @@ messages.appendChild(div);
 
 
 
-messages.scrollTop=messages.scrollHeight;
+messages.scrollTop =
+messages.scrollHeight;
 
 
 
-});
+}
+
+);
 
 
 }
@@ -489,8 +579,37 @@ messages.scrollTop=messages.scrollHeight;
 
 
 // ===============================
-// پاک کردن چت مدیر
+// Online User Display
 // ===============================
+
+
+if(membersList){
+
+
+membersList.innerHTML =
+`
+<div class="member-item">
+🟢 ${username}
+</div>
+`;
+
+
+
+}
+
+
+
+
+
+
+
+
+// ===============================
+// Clear Chat (Admin)
+// ===============================
+
+
+if(clearChat){
 
 
 clearChat.onclick=()=>{
@@ -498,21 +617,41 @@ clearChat.onclick=()=>{
 
 if(isAdmin){
 
-remove(ref(db,"messages"));
+
+remove(
+ref(db,"messages")
+);
+
 
 }
+
+
+else{
+
+
+alert("فقط مدیر اجازه دارد ❌");
+
+
+}
+
 
 
 };
 
 
+}
+
+
 
 
 
 
 // ===============================
-// خروج
+// Exit Chat
 // ===============================
+
+
+if(exitChat){
 
 
 exitChat.onclick=()=>{
@@ -520,27 +659,48 @@ exitChat.onclick=()=>{
 
 chatRoom.style.display="none";
 
+
 site.style.display="block";
 
 
 };
 
 
+}
 
 
 
 
-// Enter برای ارسال
 
 
-chatText.addEventListener("keydown",(e)=>{
+// ===============================
+// Enter Send
+// ===============================
+
+
+if(chatText){
+
+
+chatText.addEventListener(
+"keydown",
+(e)=>{
 
 
 if(e.key==="Enter"){
 
+
+if(sendBtn)
+
 sendBtn.click();
+
+
 
 }
 
 
-});
+}
+
+);
+
+
+  }                                           }
