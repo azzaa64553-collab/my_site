@@ -1,9 +1,7 @@
-// ======================================
-// Firebase Imports
-// ======================================
+// Firebase imports
 
-import { initializeApp } from 
-"https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import { initializeApp } 
+from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 
 import {
 getDatabase,
@@ -11,13 +9,11 @@ ref,
 push,
 onValue,
 serverTimestamp
-} from 
-"https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+}
+from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
 
-// ======================================
 // Firebase Config
-// ======================================
 
 const firebaseConfig = {
   apiKey: "AIzaSyBM5zOgIQKSG7_zQJ_L7taB0CQGjYWRSVA",
@@ -32,15 +28,13 @@ const firebaseConfig = {
 
 
 const app = initializeApp(firebaseConfig);
-
 const db = getDatabase(app);
-
-
-// ======================================
+// ===============================
 // Login System
-// ======================================
+// ===============================
 
 const PASSWORD = "_mamad_13900_";
+
 
 const loginScreen =
 document.getElementById("login-screen");
@@ -48,7 +42,7 @@ document.getElementById("login-screen");
 const site =
 document.getElementById("site");
 
-const password =
+const passwordInput =
 document.getElementById("password");
 
 const loginBtn =
@@ -58,45 +52,65 @@ document.getElementById("loginBtn");
 let userName = "Guest";
 
 
+
 if(loginBtn){
 
 loginBtn.onclick = ()=>{
 
-if(password.value === PASSWORD){
 
-loginScreen.style.display="none";
+let pass = passwordInput.value;
 
-site.style.display="block";
 
-localStorage.setItem("login","true");
+if(pass === PASSWORD){
 
-}else{
-
-alert("رمز اشتباه است");
-
-}
-
-};
-
-}
-// ======================================
-// Auto Login
-// ======================================
-
-if(localStorage.getItem("login") === "true"){
 
 if(loginScreen)
 loginScreen.style.display="none";
 
+
 if(site)
 site.style.display="block";
+
+
+localStorage.setItem(
+"login",
+"true"
+);
+
+
+}else{
+
+
+alert("رمز اشتباه است");
+
 
 }
 
 
-// ======================================
-// Chat System
-// ======================================
+};
+
+}
+
+
+
+// ورود خودکار
+
+if(localStorage.getItem("login") === "true"){
+
+
+
+if(loginScreen)
+loginScreen.style.display="none";
+
+
+if(site)
+site.style.display="block";
+
+
+}
+// ===============================
+// Chat Room
+// ===============================
 
 const chatBox =
 document.getElementById("chatBox");
@@ -108,14 +122,11 @@ const sendBtn =
 document.getElementById("sendBtn");
 
 
-// ارسال پیام
-
 if(sendBtn){
 
 sendBtn.onclick = ()=>{
 
-let text = messageInput.value.trim();
-
+const text = messageInput.value.trim();
 
 if(text === "") return;
 
@@ -137,8 +148,6 @@ messageInput.value="";
 }
 
 
-// دریافت پیام‌ها
-
 function loadMessages(){
 
 if(!chatBox) return;
@@ -148,120 +157,34 @@ onValue(
 ref(db,"messages"),
 (snapshot)=>{
 
-
 chatBox.innerHTML="";
 
 
-snapshot.forEach((child)=>{
+snapshot.forEach((item)=>{
+
+const data=item.val();
 
 
-let msg = child.val();
+const msg=document.createElement("div");
+
+msg.className="msg";
 
 
-let div =
-document.createElement("div");
-
-
-div.className="msg";
-
-
-div.innerHTML = `
-
-<b>${msg.name}</b>
-
+msg.innerHTML=`
+<b>${data.name}</b>
 <br>
-
-${msg.text}
-
+${data.text}
 `;
 
 
-chatBox.appendChild(div);
+chatBox.appendChild(msg);
 
 
 });
-
 
 });
 
 }
 
-
-// فعال کردن چت
 
 loadMessages();
-// ======================================
-// Members Page
-// ======================================
-
-const membersBtn =
-document.getElementById("membersBtn");
-
-const membersPage =
-document.getElementById("membersPage");
-
-
-if(membersBtn){
-
-membersBtn.onclick = ()=>{
-
-if(membersPage){
-
-membersPage.style.display="block";
-
-}
-
-};
-
-}
-
-
-// ======================================
-// Home Button
-// ======================================
-
-const homeBtn =
-document.getElementById("homeBtn");
-
-
-if(homeBtn){
-
-homeBtn.onclick = ()=>{
-
-if(membersPage){
-
-membersPage.style.display="none";
-
-}
-
-};
-
-}
-
-
-// ======================================
-// Logout
-// ======================================
-
-const logoutBtn =
-document.getElementById("logoutBtn");
-
-
-if(logoutBtn){
-
-logoutBtn.onclick = ()=>{
-
-localStorage.removeItem("login");
-
-location.reload();
-
-};
-
-}
-
-
-// ======================================
-// Loaded
-// ======================================
-
-console.log("LA3 Cyber Security Loaded");
