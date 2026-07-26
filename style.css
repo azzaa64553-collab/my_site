@@ -485,3 +485,18 @@ button{
     box-shadow: 0 0 15px #00ffff !important;
     background: #06151b !important;
 }
+#membersList{
+    display:block;
+    width:90%;
+    margin:10px auto;
+    color:white;
+    font-size:20px;
+}
+
+
+.member-item{
+    padding:10px;
+    margin:5px;
+    border-radius:10px;
+    background:#111;
+    }
