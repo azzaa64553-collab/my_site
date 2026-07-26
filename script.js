@@ -306,12 +306,14 @@ chatLogin.style.display="flex";
 
 // نمایش اعضا و وضعیت آنلاین
 
-
 function showMembers(){
-
 
 if(!membersList) return;
 
+
+membersList.innerHTML = `
+<h3>👥 اعضای LA3</h3>
+`;
 
 
 onValue(ref(db,"online"),(snapshot)=>{
@@ -321,38 +323,40 @@ let onlineUsers = snapshot.val() || {};
 
 
 
-membersList.innerHTML = `
-
-<h3>👥 اعضای LA3</h3>
-
-`;
-
-
-
 for(let code in users){
 
 
 let status = onlineUsers[code] ? "🟢 آنلاین" : "⚫ آفلاین";
 
 
+let old = document.getElementById("member-"+code);
 
-membersList.innerHTML += `
 
-<div class="member-item">
-
+let html = `
+<div class="member-item" id="member-${code}">
 ${status} - ${users[code]}
-
 </div>
-
 `;
+
+
+
+if(old){
+
+old.innerHTML = `${status} - ${users[code]}`;
+
+}else{
+
+membersList.innerHTML += html;
+
+}
 
 
 
 }
 
 
-});
 
+});
 
 }
 
