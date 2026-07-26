@@ -15,7 +15,7 @@
 <body>
 
 
-<!-- صفحه ورود اصلی -->
+<!-- ورود اصلی -->
 
 <div id="login-screen">
 
@@ -24,7 +24,7 @@
 <h2>ورود به سیستم</h2>
 
 
-<input
+<input 
 type="password"
 id="password"
 placeholder="رمز عبور">
@@ -53,7 +53,7 @@ placeholder="رمز عبور">
 
 
 
-<!-- سایت -->
+<!-- سایت اصلی -->
 
 <div id="site">
 
@@ -70,7 +70,6 @@ LA3 Cyber Security
 
 <main>
 
-
 <h2>
 خوش آمدید
 </h2>
@@ -86,7 +85,6 @@ LA3 Cyber Security
 </button>
 
 
-
 </main>
 
 
@@ -97,9 +95,7 @@ LA3 Cyber Security
 
 
 
-
-<!-- صفحه اعضای تیم -->
-
+<!-- صفحه اعضا -->
 
 <div id="membersPage">
 
@@ -107,7 +103,6 @@ LA3 Cyber Security
 <h2>
 اعضا تیم
 </h2>
-
 
 
 <table>
@@ -120,41 +115,29 @@ LA3 Cyber Security
 </tr>
 
 
-
 <tr>
-<td>
-سید علی اصغر
-</td>
+<td>سید علی اصغر</td>
 </tr>
 
 
 <tr>
-<td>
-سید علی موسوی
-</td>
+<td>سید علی موسوی</td>
 </tr>
 
 
 <tr>
-<td>
-محمد
-</td>
+<td>محمد</td>
 </tr>
 
 
 <tr>
-<td>
-طاها زالی
-</td>
+<td>طاها زالی</td>
 </tr>
 
 
 <tr>
-<td>
-سعدی
-</td>
+<td>سعدی</td>
 </tr>
-
 
 
 </table>
@@ -166,9 +149,7 @@ LA3 Cyber Security
 </button>
 
 
-
 </div>
-
 
 
 
@@ -198,11 +179,9 @@ id="chatCode"
 placeholder="کد کاربری">
 
 
-
 <button id="chatEnter">
 ورود
 </button>
-
 
 
 <p id="chatMessage"></p>
@@ -219,9 +198,7 @@ placeholder="کد کاربری">
 
 
 
-
-
-<!-- صفحه چتروم -->
+<!-- چتروم -->
 
 
 <div id="chatRoom">
@@ -230,14 +207,23 @@ placeholder="کد کاربری">
 <h2>
 💬 چتروم LA3
 </h2>
-<div id="membersList">
-
-  </div>
 
 
-<div id="messages">
+<!-- نمایش نام کاربر -->
 
-</div>
+<div id="currentUser"></div>
+
+
+
+<!-- اعضای آنلاین -->
+
+<div id="membersList"></div>
+
+
+
+<!-- پیام ها -->
+
+<div id="messages"></div>
 
 
 
@@ -251,7 +237,6 @@ placeholder="پیام خود را بنویسید">
 <button id="sendBtn">
 ارسال
 </button>
-
 
 
 
@@ -275,16 +260,7 @@ placeholder="پیام خود را بنویسید">
 
 
 
-<!-- Firebase -->
-
-
-
-
-
-
-
 <script type="module" src="script.js"></script>
-
 
 
 </body>
