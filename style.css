@@ -6,19 +6,36 @@
 }
 
 
+html,body{
+    width:100%;
+    min-height:100%;
+    overflow-x:hidden;
+}
+
+
 body{
     background:#000;
     color:#00ff66;
 }
 
 
-/* صفحه ورود اصلی */
+
+/* =====================
+      صفحه ورود
+===================== */
+
 
 #login-screen,
 #chatLogin{
 
     position:fixed;
-    inset:0;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100dvh;
+
     background:rgba(0,0,0,.95);
 
     display:flex;
@@ -146,17 +163,9 @@ button{
 
 
 
-#message{
-
-    margin-top:15px;
-
-}
-
-
-
-
-
-/* سایت اصلی */
+/* =====================
+      سایت اصلی
+===================== */
 
 
 #site{
@@ -189,16 +198,11 @@ button{
 
     margin-top:20px;
 
-    color:#00ff66;
-
 }
 
 
 
-
-
 #membersBtn{
-
 
     margin-top:35px;
 
@@ -218,10 +222,7 @@ button{
 
 
 
-
-
 #chatBtn{
-
 
     margin-top:35px;
 
@@ -233,8 +234,6 @@ button{
 
     color:#000;
 
-    border:none;
-
     border-radius:10px;
 
     box-shadow:0 0 20px #00ffff;
@@ -243,10 +242,9 @@ button{
 
 
 
-
-
-
-/* صفحه اعضا */
+/* =====================
+       اعضا
+===================== */
 
 
 #membersPage{
@@ -290,8 +288,6 @@ button{
 
 
 
-
-
 #backBtn{
 
     padding:12px 30px;
@@ -306,12 +302,9 @@ button{
 
 
 
-
-
-/* ================= */
-/*      چتروم        */
-/* ================= */
-
+/* =====================
+       چتروم
+===================== */
 
 
 #chatLogin{
@@ -342,7 +335,6 @@ button{
 
 
 
-
 #chatRoom h2{
 
     text-align:center;
@@ -355,10 +347,66 @@ button{
 
 
 
+/* کاربر فعلی */
+
+#currentUser{
+
+    text-align:center;
+
+    color:#00ff66;
+
+    font-size:20px;
+
+    margin:15px;
+
+    text-shadow:0 0 10px #00ff66;
+
+}
+
+
+
+/* اعضای آنلاین */
+
+#membersList{
+
+    display:block;
+
+    width:90%;
+
+    margin:10px auto;
+
+    color:white;
+
+    font-size:20px;
+
+}
+
+
+
+.member-item{
+
+    padding:10px;
+
+    margin:5px;
+
+    border-radius:10px;
+
+    background:#111;
+
+    border:1px solid #00ffff;
+
+    box-shadow:0 0 10px #00ffff;
+
+}
+
+
+
+/* پیام ها */
+
+
 #messages{
 
-
-    height:70vh;
+    height:65vh;
 
     overflow-y:auto;
 
@@ -366,15 +414,11 @@ button{
 
     padding:15px;
 
-
 }
 
 
 
 .chat-message{
-
-
-    border:2px solid #00ff66;
 
     border-radius:12px;
 
@@ -382,10 +426,31 @@ button{
 
     margin-bottom:15px;
 
+}
+
+
+
+.my-message{
+
+    border:2px solid #00ff66;
+
     box-shadow:0 0 15px #00ff66;
+
+    background:#061b0d;
 
 }
 
+
+
+.other-message{
+
+    border:2px solid #00ffff;
+
+    box-shadow:0 0 15px #00ffff;
+
+    background:#06151b;
+
+}
 
 
 
@@ -396,8 +461,6 @@ button{
     font-size:20px;
 
     font-weight:bold;
-
-    text-shadow:0 0 10px red;
 
 }
 
@@ -425,10 +488,7 @@ button{
 
 
 
-
-
 #chatText{
-
 
     width:70%;
 
@@ -450,8 +510,6 @@ button{
 
     background:#00ff66;
 
-    margin-right:5px;
-
 }
 
 
@@ -470,33 +528,4 @@ button{
 
     background:#00ffff;
 
-    margin-right:5px;
-
-    }
-.chat-message.my-message {
-    border: 2px solid #00ff66 !important;
-    box-shadow: 0 0 15px #00ff66 !important;
-    background: #061b0d !important;
 }
-
-
-.chat-message.other-message {
-    border: 2px solid #00ffff !important;
-    box-shadow: 0 0 15px #00ffff !important;
-    background: #06151b !important;
-}
-#membersList{
-    display:block;
-    width:90%;
-    margin:10px auto;
-    color:white;
-    font-size:20px;
-}
-
-
-.member-item{
-    padding:10px;
-    margin:5px;
-    border-radius:10px;
-    background:#111;
-    }
