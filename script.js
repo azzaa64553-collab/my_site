@@ -1,5 +1,12 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+import { 
+getDatabase, 
+ref, 
+push, 
+onValue, 
+remove 
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+
 
 
 const firebaseConfig = {
@@ -14,6 +21,7 @@ const firebaseConfig = {
 };
 
 
+
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
@@ -22,7 +30,9 @@ const db = getDatabase(app);
 const PASSWORD = "_mamad_13900_";
 
 
+
 // عناصر ورود اصلی
+
 const loginScreen = document.getElementById("login-screen");
 const site = document.getElementById("site");
 
@@ -34,13 +44,17 @@ const message = document.getElementById("message");
 const countdown = document.getElementById("countdown");
 
 
+
 // اعضا
+
 const membersPage = document.getElementById("membersPage");
 const membersBtn = document.getElementById("membersBtn");
 const backBtn = document.getElementById("backBtn");
 
 
+
 // چتروم
+
 const chatBtn = document.getElementById("chatBtn");
 const chatLogin = document.getElementById("chatLogin");
 const chatRoom = document.getElementById("chatRoom");
@@ -68,14 +82,17 @@ chatRoom.style.display="none";
 let attempts = 0;
 let locked = false;
 
+
 let currentUser = "";
 let currentName = "";
 
 
+let chatListenerStarted = false;
 
-// کاربران چتروم
+
 
 const users = {
+
 
 "ali5678":"سید علی اصغر",
 
@@ -87,7 +104,9 @@ const users = {
 
 "modir12131213":"محمد (مدیر)"
 
+
 };
+
 
 
 
@@ -95,53 +114,75 @@ const users = {
 
 toggle.onclick=function(){
 
+
 if(password.type==="password"){
 
+
 password.type="text";
+
 toggle.innerHTML="🙈";
+
 
 }else{
 
+
 password.type="password";
+
 toggle.innerHTML="👁";
 
+
 }
+
 
 };
 
 
 
+
 password.addEventListener("keydown",function(e){
 
+
 if(e.key==="Enter"){
+
 login();
+
 }
 
+
 });
+
 
 
 loginBtn.onclick=login;
 
 
 
+
 function login(){
 
+
 if(locked)return;
+
 
 
 if(password.value===PASSWORD){
 
 
 message.style.color="#00ff66";
+
 message.innerHTML="در حال ورود...";
 
 
 setTimeout(()=>{
 
+
 loginScreen.style.display="none";
+
 site.style.display="block";
 
+
 },1200);
+
 
 
 }else{
@@ -149,24 +190,34 @@ site.style.display="block";
 
 attempts++;
 
+
 message.style.color="red";
+
 message.innerHTML="رمز اشتباه است";
+
 
 password.value="";
 
 
+
 if(attempts>=3){
+
 
 locked=true;
 
+
 loginBtn.disabled=true;
+
 password.disabled=true;
+
 
 
 let sec=30;
 
 
+
 countdown.innerHTML="تلاش دوباره: "+sec;
+
 
 
 let timer=setInterval(()=>{
@@ -174,21 +225,31 @@ let timer=setInterval(()=>{
 
 sec--;
 
+
 countdown.innerHTML="تلاش دوباره: "+sec;
+
 
 
 if(sec<=0){
 
+
 clearInterval(timer);
 
+
 attempts=0;
+
 locked=false;
 
+
 loginBtn.disabled=false;
+
 password.disabled=false;
 
+
 countdown.innerHTML="";
+
 message.innerHTML="";
+
 
 }
 
@@ -196,10 +257,12 @@ message.innerHTML="";
 },1000);
 
 
+
 }
 
 
 }
+
 
 }
 // صفحه اعضا
@@ -208,6 +271,7 @@ message.innerHTML="";
 membersBtn.onclick=function(){
 
 site.style.display="none";
+
 membersPage.style.display="block";
 
 };
@@ -217,10 +281,10 @@ membersPage.style.display="block";
 backBtn.onclick=function(){
 
 membersPage.style.display="none";
+
 site.style.display="block";
 
 };
-
 
 
 
@@ -233,6 +297,7 @@ site.style.display="block";
 chatBtn.onclick=function(){
 
 site.style.display="none";
+
 chatLogin.style.display="flex";
 
 };
@@ -241,30 +306,37 @@ chatLogin.style.display="flex";
 
 
 
+
 chatEnter.onclick=function(){
 
 
-let code=chatCode.value;
+let code = chatCode.value.trim();
+
 
 
 if(users[code]){
 
 
-currentUser=code;
-currentName=users[code];
+currentUser = code;
+
+currentName = users[code];
 
 
 chatLogin.style.display="none";
+
 chatRoom.style.display="block";
 
 
+
 loadMessages();
+
 
 
 }else{
 
 
 chatMessage.style.color="red";
+
 chatMessage.innerHTML="کد اشتباه است";
 
 
@@ -285,28 +357,49 @@ chatMessage.innerHTML="کد اشتباه است";
 sendBtn.onclick=function(){
 
 
-let text=chatText.value.trim();
+let text = chatText.value.trim();
+
 
 
 if(text==="") return;
 
 
 
-let data={
-
-name:currentName,
-
-text:text,
-
-time:new Date().toLocaleTimeString("fa-IR")
-
-};
+if(currentUser===""){
 
 
+alert("ابتدا وارد چتروم شوید");
 
-// ذخیره در دیتابیس
+return;
 
-push(ref(db,"chat"),data);
+
+}
+
+
+
+push(ref(db,"chat"),{
+
+
+name: currentName,
+
+
+text: text,
+
+
+time: new Date().toLocaleTimeString("fa-IR")
+
+
+})
+
+.catch(error=>{
+
+
+console.log(error);
+
+alert("خطا در ارسال پیام");
+
+
+});
 
 
 
@@ -321,10 +414,44 @@ chatText.value="";
 
 
 
+
+// ارسال با Enter
+
+
+chatText.addEventListener("keydown",function(e){
+
+
+if(e.key==="Enter"){
+
+
+sendBtn.click();
+
+
+}
+
+
+});
+
+
+
+
+
+
+
+
 // نمایش پیام ها از Firebase
 
 
 function loadMessages(){
+
+
+
+if(chatListenerStarted) return;
+
+
+
+chatListenerStarted=true;
+
 
 
 onValue(ref(db,"chat"),(snapshot)=>{
@@ -342,6 +469,7 @@ let msg=item.val();
 
 
 messages.innerHTML += `
+
 
 <div class="chat-message">
 
@@ -369,7 +497,9 @@ ${msg.time}
 </div>
 
 
+
 </div>
+
 
 `;
 
@@ -379,17 +509,24 @@ ${msg.time}
 
 
 
+messages.scrollTop = messages.scrollHeight;
+
+
+
+},(error)=>{
+
+
+console.log("Firebase Error:",error);
+
+
+alert("خطا در اتصال دیتابیس");
+
+
 });
 
 
+
 }
-
-
-
-
-
-
-
 // پاک کردن تاریخچه فقط مدیر
 
 
@@ -399,7 +536,22 @@ clearChat.onclick=function(){
 if(currentUser==="modir12131213"){
 
 
-remove(ref(db,"chat"));
+remove(ref(db,"chat"))
+
+.then(()=>{
+
+messages.innerHTML="";
+
+})
+
+
+.catch(error=>{
+
+console.log(error);
+
+alert("خطا در پاک کردن چت");
+
+});
 
 
 }else{
@@ -419,6 +571,7 @@ alert("فقط مدیر اجازه پاک کردن دارد");
 
 
 
+
 // خروج از چتروم
 
 
@@ -427,7 +580,14 @@ exitChat.onclick=function(){
 
 chatRoom.style.display="none";
 
+
 site.style.display="block";
+
+
+
+currentUser="";
+
+currentName="";
 
 
 };
@@ -437,10 +597,15 @@ site.style.display="block";
 
 
 
+
+
 // جلوگیری از راست کلیک
+
 
 document.addEventListener("contextmenu",function(e){
 
+
 e.preventDefault();
+
 
 });
