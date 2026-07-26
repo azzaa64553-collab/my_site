@@ -18,7 +18,6 @@ remove
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
 
-
 // ===============================
 // Firebase
 // ===============================
@@ -48,7 +47,6 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 
-
 // ===============================
 // Elements
 // ===============================
@@ -66,7 +64,6 @@ const message = document.getElementById("message");
 
 
 const site = document.getElementById("site");
-
 
 const membersBtn = document.getElementById("membersBtn");
 
@@ -90,7 +87,6 @@ const chatRoom = document.getElementById("chatRoom");
 
 const currentUser = document.getElementById("currentUser");
 
-
 const messages = document.getElementById("messages");
 
 const chatText = document.getElementById("chatText");
@@ -100,7 +96,6 @@ const sendBtn = document.getElementById("sendBtn");
 const clearChat = document.getElementById("clearChat");
 
 const exitChat = document.getElementById("exitChat");
-
 
 
 // ===============================
@@ -226,6 +221,7 @@ else{
 
 message.innerText="رمز اشتباه است ❌";
 
+
 password.value="";
 
 
@@ -243,50 +239,7 @@ password.value="";
 
 
 // ===============================
-// Members Page
-// ===============================
-
-
-if(membersBtn){
-
-
-membersBtn.onclick=()=>{
-
-
-site.style.display="none";
-
-membersPage.style.display="block";
-
-
-};
-
-
-}
-
-
-
-if(backBtn){
-
-
-backBtn.onclick=()=>{
-
-
-membersPage.style.display="none";
-
-site.style.display="block";
-
-
-};
-
-
-}
-
-
-
-
-
-// ===============================
-// Open Chat Login
+// Open Chat
 // ===============================
 
 
@@ -297,6 +250,7 @@ chatBtn.onclick=()=>{
 
 
 site.style.display="none";
+
 
 chatLogin.style.display="flex";
 
@@ -343,6 +297,7 @@ username
 
 
 chatLogin.style.display="none";
+
 
 chatRoom.style.display="block";
 
@@ -394,9 +349,7 @@ chatMessage.innerText =
 
 
 
-};
-
-
+}
 }
 // ===============================
 // Send Message Fixed
@@ -413,12 +366,12 @@ let text = chatText.value.trim();
 
 
 
-if(text==="")
+if(text === "")
 return;
 
 
 
-if(username===""){
+if(username === ""){
 
 alert("ابتدا وارد چت شوید ❌");
 
@@ -428,9 +381,7 @@ return;
 
 
 
-push(
-ref(db,"messages"),
-{
+push(ref(db,"messages"),{
 
 name: username,
 
@@ -438,9 +389,8 @@ text: text,
 
 time: Date.now()
 
-}
+})
 
-)
 .then(()=>{
 
 
@@ -448,12 +398,13 @@ chatText.value="";
 
 
 })
+
 .catch((error)=>{
 
 
-console.log(error);
+alert("خطا در ارسال پیام: " + error.message);
 
-alert("خطا در ارسال پیام ❌");
+console.log(error);
 
 
 });
@@ -469,7 +420,7 @@ alert("خطا در ارسال پیام ❌");
 
 
 // ===============================
-// Load Messages Fixed
+// Load Messages
 // ===============================
 
 
@@ -493,7 +444,7 @@ messages.innerHTML="";
 snapshot.forEach((item)=>{
 
 
-let data = item.val();
+let data=item.val();
 
 
 
@@ -502,7 +453,7 @@ return;
 
 
 
-let div = document.createElement("div");
+let div=document.createElement("div");
 
 
 
@@ -524,18 +475,15 @@ div.classList.add("other-message");
 
 
 
-
-div.innerHTML = `
+div.innerHTML=`
 
 <div class="username">
 ${data.name || "کاربر"}
 </div>
 
-
 <div class="text">
 ${data.text || ""}
 </div>
-
 
 <div class="time">
 ${new Date(data.time).toLocaleString("fa-IR")}
@@ -570,36 +518,6 @@ messages.scrollHeight;
 
 
 // ===============================
-// Enter Key Send
-// ===============================
-
-
-if(chatText){
-
-
-chatText.addEventListener(
-"keydown",
-(e)=>{
-
-
-if(e.key==="Enter"){
-
-
-if(sendBtn)
-
-sendBtn.click();
-
-
-}
-
-
-}
-
-);
-
-
-}
-// ===============================
 // Clear Chat Admin
 // ===============================
 
@@ -607,7 +525,7 @@ sendBtn.click();
 if(clearChat){
 
 
-clearChat.onclick = ()=>{
+clearChat.onclick=()=>{
 
 
 if(isAdmin){
@@ -615,17 +533,7 @@ if(isAdmin){
 
 remove(
 ref(db,"messages")
-)
-.then(()=>{
-
-alert("همه پیام‌ها پاک شد ✅");
-
-})
-.catch((error)=>{
-
-console.log(error);
-
-});
+);
 
 
 }
@@ -650,25 +558,20 @@ alert("فقط مدیر اجازه دارد ❌");
 
 
 // ===============================
-// Exit Chat Fixed
+// Exit Chat
 // ===============================
 
 
 if(exitChat){
 
 
-exitChat.onclick = ()=>{
+exitChat.onclick=()=>{
 
-
-if(chatRoom)
 
 chatRoom.style.display="none";
 
 
-if(site)
-
 site.style.display="block";
-
 
 
 username="";
@@ -680,26 +583,7 @@ isAdmin=false;
 localStorage.removeItem("LA3user");
 
 
-
 };
 
 
-}
-
-
-
-
-
-// ===============================
-// Auto Login Saved User
-// ===============================
-
-
-if(username && currentUser){
-
-
-currentUser.innerText =
-"کاربر وارد شده: " + username;
-
-
-}
+  }
