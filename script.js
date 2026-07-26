@@ -1,429 +1,371 @@
-const PASSWORD = "_mamad_13900_";
+// ===============================
+// LA3 Cyber Security - script.js
+// Fixed Version Part 1
+// ===============================
 
 
-// عناصر ورود اصلی
+// Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  push,
+  onValue,
+  remove
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+
+
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyBM5zOgIQKSG7_zQJ_L7taB0CQGjYWRSVA",
+  authDomain: "la3chat.firebaseapp.com",
+  databaseURL: "https://la3chat-default-rtdb.firebaseio.com",
+  projectId: "la3chat",
+  storageBucket: "la3chat.firebasestorage.app",
+  messagingSenderId: "831502350386",
+  appId: "1:831502350386:web:944a347e3b7656ea60242b",
+  measurementId: "G-0LCL5N0KPL"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+
+// ===============================
+// Elements
+// ===============================
+
 const loginScreen = document.getElementById("login-screen");
-const site = document.getElementById("site");
-
 const password = document.getElementById("password");
-const loginBtn = document.getElementById("loginBtn");
 const toggle = document.getElementById("toggle");
-
+const loginBtn = document.getElementById("loginBtn");
 const message = document.getElementById("message");
 const countdown = document.getElementById("countdown");
 
 
-// اعضا
-const membersPage = document.getElementById("membersPage");
+const site = document.getElementById("site");
+
 const membersBtn = document.getElementById("membersBtn");
+const chatBtn = document.getElementById("chatBtn");
+
+
+const membersPage = document.getElementById("membersPage");
 const backBtn = document.getElementById("backBtn");
 
 
-// چتروم
-const chatBtn = document.getElementById("chatBtn");
 const chatLogin = document.getElementById("chatLogin");
-const chatRoom = document.getElementById("chatRoom");
-
 const chatCode = document.getElementById("chatCode");
 const chatEnter = document.getElementById("chatEnter");
+
+const chatRoom = document.getElementById("chatRoom");
 const chatMessage = document.getElementById("chatMessage");
 
 const messages = document.getElementById("messages");
 const chatText = document.getElementById("chatText");
-const sendBtn = document.getElementById("sendBtn");
 
+const sendBtn = document.getElementById("sendBtn");
 const clearChat = document.getElementById("clearChat");
 const exitChat = document.getElementById("exitChat");
 
 
+// ===============================
+// Password
+// ===============================
 
-site.style.display="none";
-membersPage.style.display="none";
-chatLogin.style.display="none";
-chatRoom.style.display="none";
-
-
-
-let attempts = 0;
-let locked = false;
-
-let currentUser = "";
-let currentName = "";
+const PASSWORD = "_mamad_13900_";
 
 
+// ===============================
+// Initial State
+// ===============================
 
-// کاربران چتروم
-
-const users = {
-
-    "ali5678":"سید علی اصغر",
-
-    "z4321":"طاها زالی",
-
-    "ms9675":"سید علی موسوی",
-
-    "sa9988":"امیر مهدی",
-
-    "modir12131213":"محمد (مدیر)"
-
-};
+if(site) site.style.display="none";
+if(membersPage) membersPage.style.display="none";
+if(chatLogin) chatLogin.style.display="none";
+if(chatRoom) chatRoom.style.display="none";
 
 
+// ===============================
+// Show / Hide Password
+// ===============================
 
+if(toggle){
 
+toggle.onclick = ()=>{
 
-// نمایش رمز
-
-toggle.onclick=function(){
-
-    if(password.type==="password"){
-
-        password.type="text";
-        toggle.innerHTML="🙈";
-
-    }else{
-
-        password.type="password";
-        toggle.innerHTML="👁";
-
-    }
+if(password.type==="password"){
+password.type="text";
+toggle.innerText="مخفی";
+}
+else{
+password.type="password";
+toggle.innerText="نمایش";
+}
 
 };
-
-
-
-
-
-password.addEventListener("keydown",function(e){
-
-    if(e.key==="Enter"){
-        login();
-    }
-
-});
-
-
-
-loginBtn.onclick=login;
-
-
-
-function login(){
-
-
-    if(locked)return;
-
-
-    if(password.value===PASSWORD){
-
-
-        message.style.color="#00ff66";
-        message.innerHTML="در حال ورود...";
-
-
-        setTimeout(()=>{
-
-
-            loginScreen.style.display="none";
-            site.style.display="block";
-
-
-        },1200);
-
-
-
-    }else{
-
-
-        attempts++;
-
-        message.style.color="red";
-        message.innerHTML="رمز اشتباه است";
-
-        password.value="";
-
-
-        if(attempts>=3){
-
-            locked=true;
-            loginBtn.disabled=true;
-            password.disabled=true;
-
-
-            let sec=30;
-
-
-            countdown.innerHTML="تلاش دوباره: "+sec;
-
-
-            let timer=setInterval(()=>{
-
-
-                sec--;
-
-                countdown.innerHTML="تلاش دوباره: "+sec;
-
-
-                if(sec<=0){
-
-                    clearInterval(timer);
-
-                    attempts=0;
-                    locked=false;
-
-                    loginBtn.disabled=false;
-                    password.disabled=false;
-
-                    countdown.innerHTML="";
-                    message.innerHTML="";
-
-                }
-
-
-            },1000);
-
-
-        }
-
-    }
 
 }
 
 
+// ===============================
+// Login
+// ===============================
+
+if(loginBtn){
+
+loginBtn.onclick = ()=>{
+
+if(password.value === PASSWORD){
+
+message.innerText="ورود موفق ✅";
+
+setTimeout(()=>{
+
+if(loginScreen)
+loginScreen.style.display="none";
+
+if(site)
+site.style.display="block";
+
+},500);
 
 
+}else{
 
-// صفحه اعضا
+message.innerText="رمز اشتباه است ❌";
+password.value="";
 
-
-membersBtn.onclick=function(){
-
-    site.style.display="none";
-    membersPage.style.display="block";
-
-};
-
-
-
-backBtn.onclick=function(){
-
-    membersPage.style.display="none";
-    site.style.display="block";
-
-};
-
-
-
-
-
-
-
-// ورود چتروم
-
-
-chatBtn.onclick=function(){
-
-    site.style.display="none";
-    chatLogin.style.display="flex";
+}
 
 };
-
-
-
-
-
-chatEnter.onclick=function(){
-
-
-    let code=chatCode.value;
-
-
-    if(users[code]){
-
-
-        currentUser=code;
-        currentName=users[code];
-
-
-        chatLogin.style.display="none";
-        chatRoom.style.display="block";
-
-
-        loadMessages();
-
-
-    }else{
-
-
-        chatMessage.style.color="red";
-        chatMessage.innerHTML="کد اشتباه است";
-
 
     }
+// ===============================
+// Members Page
+// ===============================
+
+if(membersBtn){
+
+membersBtn.onclick = ()=>{
+
+if(site)
+site.style.display="none";
+
+if(membersPage)
+membersPage.style.display="block";
+
+};
+
+}
+
+
+if(backBtn){
+
+backBtn.onclick = ()=>{
+
+if(membersPage)
+membersPage.style.display="none";
+
+if(site)
+site.style.display="block";
+
+};
+
+}
+
+
+// ===============================
+// Chat Open
+// ===============================
+
+if(chatBtn){
+
+chatBtn.onclick = ()=>{
+
+if(site)
+site.style.display="none";
+
+if(chatLogin)
+chatLogin.style.display="block";
+
+};
+
+}
+
+
+// ===============================
+// Enter Chat
+// ===============================
+
+if(chatEnter){
+
+chatEnter.onclick = ()=>{
+
+
+let code = chatCode.value.trim();
+
+
+if(code==="LA3"){
+
+
+if(chatLogin)
+chatLogin.style.display="none";
+
+
+if(chatRoom)
+chatRoom.style.display="block";
+
+
+loadMessages();
+
+
+}else{
+
+
+if(chatMessage)
+chatMessage.innerText="کد اشتباه است ❌";
+
+
+}
 
 
 };
 
+}
 
 
+// ===============================
+// Send Message
+// ===============================
+
+if(sendBtn){
+
+sendBtn.onclick = ()=>{
 
 
+let text = chatText.value.trim();
 
 
-// ارسال پیام
+if(text==="")
+return;
 
 
-sendBtn.onclick=function(){
+push(ref(db,"messages"),{
+
+text:text,
+time:Date.now()
+
+});
 
 
-    let text=chatText.value.trim();
-
-
-    if(text==="")return;
-
-
-
-    let data={
-
-        name:currentName,
-
-        text:text,
-
-        time:new Date().toLocaleTimeString("fa-IR")
-
-    };
-
-
-
-    let old=JSON.parse(localStorage.getItem("chat")) || [];
-
-
-    old.push(data);
-
-
-    localStorage.setItem("chat",JSON.stringify(old));
-
-
-
-    chatText.value="";
-
-
-    loadMessages();
+chatText.value="";
 
 
 };
 
-
-
-
-
-
-
-// نمایش پیام ها
-
+    }
+// ===============================
+// Load Messages
+// ===============================
 
 function loadMessages(){
 
-
-    messages.innerHTML="";
-
-
-    let data=JSON.parse(localStorage.getItem("chat")) || [];
+if(!messages)
+return;
 
 
-
-    data.forEach(msg=>{
-
-
-        messages.innerHTML += `
-
-        <div class="chat-message">
-
-        <div class="username">
-        ${msg.name}
-        </div>
+onValue(ref(db,"messages"),(snapshot)=>{
 
 
-        <div class="text">
-        ${msg.text}
-        </div>
+messages.innerHTML="";
 
 
-        <div class="time">
-        ${msg.time}
-        </div>
+snapshot.forEach((item)=>{
 
 
-        </div>
-
-        `;
+let data=item.val();
 
 
-    });
+let div=document.createElement("div");
 
+div.className="message";
+
+div.innerText=data.text;
+
+
+messages.appendChild(div);
+
+
+});
+
+
+messages.scrollTop=messages.scrollHeight;
+
+
+});
 
 
 }
 
 
+// ===============================
+// Clear Chat
+// ===============================
+
+if(clearChat){
+
+clearChat.onclick=()=>{
 
 
-
-
-
-// پاک کردن تاریخچه فقط مدیر
-
-
-clearChat.onclick=function(){
-
-
-    if(currentUser==="modir12131213"){
-
-
-        localStorage.removeItem("chat");
-
-        loadMessages();
-
-
-    }else{
-
-
-        alert("فقط مدیر اجازه پاک کردن دارد");
-
-
-    }
+remove(ref(db,"messages"));
 
 
 };
 
+}
 
 
+// ===============================
+// Exit Chat
+// ===============================
+
+if(exitChat){
+
+exitChat.onclick=()=>{
 
 
+if(chatRoom)
+chatRoom.style.display="none";
 
 
-// خروج از چتروم
-
-
-exitChat.onclick=function(){
-
-
-    chatRoom.style.display="none";
-
-    site.style.display="block";
+if(site)
+site.style.display="block";
 
 
 };
 
+}
 
 
+// ===============================
+// Enter Key Send
+// ===============================
+
+if(chatText){
+
+chatText.addEventListener("keydown",(e)=>{
 
 
+if(e.key==="Enter"){
 
-// جلوگیری از راست کلیک
+if(sendBtn)
+sendBtn.click();
 
-document.addEventListener("contextmenu",function(e){
+}
 
-    e.preventDefault();
 
 });
+
+}
