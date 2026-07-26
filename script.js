@@ -1,317 +1,358 @@
-// ===============================
-// Firebase
-// ===============================
+// =====================================
+// Firebase Config
+// =====================================
 
 import { initializeApp } from 
 "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 
 import {
-getDatabase,
-ref,
-set,
-onValue,
-push,
-onDisconnect
+ getDatabase,
+ ref,
+ set,
+ push,
+ onValue,
+ onDisconnect,
+ serverTimestamp
 } from 
 "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
 
-// تنظیمات Firebase خودت را اینجا نگه دار
+// Firebase
 const firebaseConfig = {
-
-apiKey: "YOUR_API_KEY",
-
-authDomain: "YOUR_AUTH_DOMAIN",
-
-databaseURL: "YOUR_DATABASE_URL",
-
-projectId: "YOUR_PROJECT_ID",
-
-storageBucket: "YOUR_STORAGE_BUCKET",
-
-messagingSenderId: "YOUR_MESSAGING_ID",
-
-appId: "YOUR_APP_ID"
-
+ apiKey: "AIzaSyBM5zOgIQKSG7_zQJ_L7taB0CQGjYWRSVA",
+ authDomain: "la3chat.firebaseapp.com",
+ databaseURL: "https://la3chat-default-rtdb.firebaseio.com",
+ projectId: "la3chat",
+ storageBucket: "la3chat.firebasestorage.app",
+ messagingSenderId: "831502350386",
+ appId: "1:831502350386:web:944a347e3b7656ea60242b",
+ measurementId: "G-0LCL5N0KPL"
 };
 
 
 const app = initializeApp(firebaseConfig);
-
 const db = getDatabase(app);
 
 
-
-// ===============================
+// =====================================
 // Elements
-// ===============================
+// =====================================
 
-const loginScreen =
-document.getElementById("login-screen");
+const loginScreen = document.getElementById("login-screen");
+const site = document.getElementById("site");
 
-
-const site =
-document.getElementById("site");
-
-
-const password =
+const passwordInput =
 document.getElementById("password");
-
 
 const loginBtn =
 document.getElementById("loginBtn");
 
 
-const messages =
-document.getElementById("messages");
+const chatBox =
+document.getElementById("chatBox");
 
-
-const chatText =
-document.getElementById("chatText");
-
+const messageInput =
+document.getElementById("messageInput");
 
 const sendBtn =
 document.getElementById("sendBtn");
 
 
-const membersList =
-document.getElementById("membersList");
+const membersPage =
+document.getElementById("membersPage");
 
 
-const exitChat =
-document.getElementById("exitChat");
+// =====================================
+// User
+// =====================================
 
-
+let currentUser = "";
 let currentName = "";
-// ===============================
+
+
+// =====================================
 // Login
-// ===============================
-
-loginBtn.addEventListener("click",()=>{
+// =====================================
 
 
-    const name = password.value.trim();
+loginBtn.onclick = () => {
+
+ const pass = passwordInput.value.trim();
 
 
-    if(name === ""){
+ if(pass === "_mamad_13900_"){
 
-        alert("رمز را وارد کنید");
-
-        return;
-
-    }
+  currentUser =
+  "user_" + Date.now();
 
 
-    currentName = name;
+  currentName =
+  "Member";
 
 
-    localStorage.setItem(
-        "username",
-        currentName
-    );
+  loginScreen.style.display="none";
+  site.style.display="block";
 
 
-    loginScreen.style.display = "none";
+  setOnline();
 
-    site.style.display = "block";
+  loadMessages();
 
+ }
+ else{
 
-    setOnline();
+  alert("رمز اشتباه است");
 
+ }
 
-});
-
+};
 
 
 
-// ===============================
-// Online Status
-// ===============================
+// =====================================
+// Online System
+// =====================================
+
 
 function setOnline(){
 
-
-    const userRef =
-    ref(db,"online/"+currentName);
-
+ const userRef =
+ ref(db,"online/"+currentUser);
 
 
-    set(userRef,{
-
-        name: currentName,
-
-        online:true,
-
-        time:Date.now()
-
-    });
+ set(userRef,{
+  name:currentName,
+  online:true,
+  time:serverTimestamp()
+ });
 
 
+ onDisconnect(userRef)
+ .set({
 
-    onDisconnect(userRef).set({
+  name:currentName,
+  online:false,
+  time:serverTimestamp()
 
-        name: currentName,
+ });
 
-        online:false,
+}
+// =====================================
+// Send Message
+// =====================================
 
-        time:Date.now()
 
-    });
+sendBtn.onclick = () => {
+
+ const text =
+ messageInput.value.trim();
+
+
+ if(text === "") return;
+
+
+ const messageRef =
+ push(ref(db,"messages"));
+
+
+ set(messageRef,{
+
+  user: currentName,
+
+  text:text,
+
+  time:serverTimestamp()
+
+ });
+
+
+ messageInput.value="";
+
+};
+
+
+
+// ارسال با Enter
+
+messageInput.addEventListener(
+"keydown",
+(e)=>{
+
+ if(e.key==="Enter"){
+
+  sendBtn.click();
+
+ }
+
+});
+
+
+
+
+// =====================================
+// Load Messages
+// =====================================
+
+
+function loadMessages(){
+
+ const messagesRef =
+ ref(db,"messages");
+
+
+ onValue(messagesRef,(snapshot)=>{
+
+
+  chatBox.innerHTML="";
+
+
+  snapshot.forEach((child)=>{
+
+
+   const msg =
+   child.val();
+
+
+   const div =
+   document.createElement("div");
+
+
+   div.className="message";
+
+
+   div.innerHTML =
+   `
+   <b>${msg.user}</b>
+   :
+   ${msg.text}
+   `;
+
+
+   chatBox.appendChild(div);
+
+
+  });
+
+
+  chatBox.scrollTop =
+  chatBox.scrollHeight;
+
+
+ });
 
 
 }
-// ===============================
-// Chat System
-// ===============================
-
-
-// ارسال پیام
-
-sendBtn.addEventListener("click",()=>{
-
-
-    const text =
-    chatText.value.trim();
-
-
-    if(text === "") return;
-
-
-
-    const messageRef =
-    push(ref(db,"messages"));
-
-
-
-    set(messageRef,{
-
-        name: currentName,
-
-        text: text,
-
-        time: new Date()
-        .toLocaleTimeString("fa-IR")
-
-    });
-
-
-
-    chatText.value = "";
-
-
-});
 
 
 
 
 
-// ===============================
-// دریافت پیام‌ها
-// ===============================
-
-
-onValue(ref(db,"messages"),(snapshot)=>{
-
-
-    if(!messages) return;
-
-
-    messages.innerHTML = "";
-
-
-
-    snapshot.forEach((item)=>{
-
-
-        const data =
-        item.val();
-
-
-
-        const div =
-        document.createElement("div");
-
-
-
-        div.innerHTML = `
-
-        <b>${data.name}</b>
-
-        : 
-
-        ${data.text}
-
-        <small>
-
-        ${data.time}
-
-        </small>
-
-        `;
-
-
-
-        messages.appendChild(div);
-
-
-
-    });
-
-
-
-    messages.scrollTop =
-    messages.scrollHeight;
-
-
-});
-// ===============================
+// =====================================
 // Online Members
-// ===============================
+// =====================================
 
 
-onValue(ref(db,"online"),(snapshot)=>{
+function loadOnlineMembers(){
 
 
-    if(!membersList) return;
+ const onlineRef =
+ ref(db,"online");
 
 
-    membersList.innerHTML = "";
+ onValue(onlineRef,(snapshot)=>{
+
+
+  if(!membersPage) return;
+
+
+  membersPage.innerHTML="";
+
+
+  let count=0;
+
+
+  snapshot.forEach((child)=>{
+
+
+   const member =
+   child.val();
+
+
+   if(member.online){
+
+
+    count++;
+
+
+    const div =
+    document.createElement("div");
+
+
+    div.innerHTML =
+    `
+    🟢 ${member.name}
+    `;
+
+
+    membersPage.appendChild(div);
+
+
+   }
+
+
+  });
 
 
 
-    snapshot.forEach((user)=>{
+  const title =
+  document.createElement("h3");
 
 
-        const data =
-        user.val();
+  title.innerHTML =
+  "اعضای آنلاین: "+count;
 
 
-
-        if(data.online === true){
-
-
-            const div =
-            document.createElement("div");
+  membersPage.prepend(title);
 
 
 
-            div.innerHTML = `
-
-            🟢 ${data.name}
-
-            `;
+ });
 
 
 
-            membersList.appendChild(div);
-
-
-        }
+}
 
 
 
-    });
+loadOnlineMembers();
+// =====================================
+// Keep Online Status Alive
+// =====================================
 
+
+window.addEventListener(
+"beforeunload",
+()=>{
+
+
+ if(currentUser){
+
+
+  set(
+   ref(db,"online/"+currentUser),
+   {
+
+    name:currentName,
+
+    online:false,
+
+    time:serverTimestamp()
+
+   }
+  );
+
+
+ }
 
 
 });
@@ -319,54 +360,130 @@ onValue(ref(db,"online"),(snapshot)=>{
 
 
 
+// =====================================
+// Update User Name
+// =====================================
 
-// ===============================
+
+function updateName(name){
+
+
+ if(!name) return;
+
+
+ currentName=name;
+
+
+ if(currentUser){
+
+
+  set(
+   ref(db,"online/"+currentUser),
+   {
+
+    name:currentName,
+
+    online:true,
+
+    time:serverTimestamp()
+
+   }
+  );
+
+
+ }
+
+
+}
+
+
+
+
+// =====================================
+// Delete Messages (Admin)
+// =====================================
+
+
+const clearBtn =
+document.getElementById("clearBtn");
+
+
+if(clearBtn){
+
+
+ clearBtn.onclick = ()=>{
+
+
+  if(
+   confirm(
+   "همه پیام‌ها پاک شود؟"
+   )
+  ){
+
+
+   set(
+    ref(db,"messages"),
+    null
+   );
+
+
+  }
+
+
+ };
+
+
+}
+
+
+
+
+// =====================================
 // Logout
-// ===============================
+// =====================================
 
 
-if(exitChat){
+const logoutBtn =
+document.getElementById("logoutBtn");
 
 
-exitChat.addEventListener("click",()=>{
+if(logoutBtn){
 
 
-    if(currentName){
+ logoutBtn.onclick=()=>{
 
 
-        set(
-        ref(db,"online/"+currentName),
-        {
+  if(currentUser){
 
-            name: currentName,
 
-            online:false,
+   set(
+    ref(db,"online/"+currentUser),
+    {
 
-            time:Date.now()
+     name:currentName,
 
-        });
+     online:false,
 
+     time:serverTimestamp()
 
     }
+   );
+
+
+  }
 
 
 
-    localStorage.removeItem("username");
+  currentUser="";
+  currentName="";
 
 
+  site.style.display="none";
 
-    site.style.display="none";
-
-
-
-    loginScreen.style.display="flex";
+  loginScreen.style.display="block";
 
 
+ };
 
-    password.value="";
-
-
-
-});
 
 }
