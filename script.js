@@ -1,28 +1,39 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-import { 
-getDatabase, 
-ref, 
-push, 
-onValue, 
-remove 
+
+import {
+getDatabase,
+ref,
+push,
+onValue,
+remove
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBM5zOgIQKSG7_zQJ_L7taB0CQGjYWRSVA",
-  authDomain: "la3chat.firebaseapp.com",
-  databaseURL: "https://la3chat-default-rtdb.firebaseio.com",
-  projectId: "la3chat",
-  storageBucket: "la3chat.firebasestorage.app",
-  messagingSenderId: "831502350386",
-  appId: "1:831502350386:web:944a347e3b7656ea60242b",
-  measurementId: "G-0LCL5N0KPL"
+
+apiKey: "AIzaSyBM5zOgIQKSG7_zQJ_L7taB0CQGjYWRSVA",
+
+authDomain: "la3chat.firebaseapp.com",
+
+databaseURL: "https://la3chat-default-rtdb.firebaseio.com",
+
+projectId: "la3chat",
+
+storageBucket: "la3chat.firebasestorage.app",
+
+messagingSenderId: "831502350386",
+
+appId: "1:831502350386:web:944a347e3b7656ea60242b",
+
+measurementId: "G-0LCL5N0KPL"
+
 };
 
 
 
 const app = initializeApp(firebaseConfig);
+
 const db = getDatabase(app);
 
 
@@ -31,16 +42,20 @@ const PASSWORD = "_mamad_13900_";
 
 
 
-// عناصر ورود اصلی
+// ورود اصلی
 
 const loginScreen = document.getElementById("login-screen");
+
 const site = document.getElementById("site");
 
 const password = document.getElementById("password");
+
 const loginBtn = document.getElementById("loginBtn");
+
 const toggle = document.getElementById("toggle");
 
 const message = document.getElementById("message");
+
 const countdown = document.getElementById("countdown");
 
 
@@ -48,7 +63,9 @@ const countdown = document.getElementById("countdown");
 // اعضا
 
 const membersPage = document.getElementById("membersPage");
+
 const membersBtn = document.getElementById("membersBtn");
+
 const backBtn = document.getElementById("backBtn");
 
 
@@ -56,40 +73,56 @@ const backBtn = document.getElementById("backBtn");
 // چتروم
 
 const chatBtn = document.getElementById("chatBtn");
+
 const chatLogin = document.getElementById("chatLogin");
+
 const chatRoom = document.getElementById("chatRoom");
 
 const chatCode = document.getElementById("chatCode");
+
 const chatEnter = document.getElementById("chatEnter");
+
 const chatMessage = document.getElementById("chatMessage");
 
 const messages = document.getElementById("messages");
+
 const chatText = document.getElementById("chatText");
+
 const sendBtn = document.getElementById("sendBtn");
 
 const clearChat = document.getElementById("clearChat");
+
 const exitChat = document.getElementById("exitChat");
+
+const membersList = document.getElementById("membersList");
 
 
 
 site.style.display="none";
+
 membersPage.style.display="none";
+
 chatLogin.style.display="none";
+
 chatRoom.style.display="none";
 
 
 
 let attempts = 0;
+
 let locked = false;
 
 
 let currentUser = "";
+
 let currentName = "";
 
 
 let chatListenerStarted = false;
 
 
+
+// کاربران
 
 const users = {
 
@@ -133,8 +166,8 @@ toggle.innerHTML="👁";
 
 }
 
-
 };
+
 
 
 
@@ -154,7 +187,6 @@ login();
 
 
 loginBtn.onclick=login;
-
 
 
 
@@ -182,7 +214,6 @@ site.style.display="block";
 
 
 },1200);
-
 
 
 }else{
@@ -213,7 +244,6 @@ password.disabled=true;
 
 
 let sec=30;
-
 
 
 countdown.innerHTML="تلاش دوباره: "+sec;
@@ -257,7 +287,6 @@ message.innerHTML="";
 },1000);
 
 
-
 }
 
 
@@ -291,7 +320,7 @@ site.style.display="block";
 
 
 
-// ورود چتروم
+// ورود به چتروم
 
 
 chatBtn.onclick=function(){
@@ -305,6 +334,55 @@ chatLogin.style.display="flex";
 
 
 
+
+
+
+// نمایش اعضای ثبت شده داخل چتروم
+
+
+function showMembers(){
+
+
+if(!membersList) return;
+
+
+membersList.innerHTML = `
+
+<h3>
+👥 اعضای LA3
+</h3>
+
+`;
+
+
+
+for(let code in users){
+
+
+membersList.innerHTML += `
+
+<div class="member-item">
+
+🟢 ${users[code]}
+
+</div>
+
+`;
+
+
+}
+
+
+}
+
+
+
+
+
+
+
+
+// ورود کاربر چتروم
 
 
 chatEnter.onclick=function(){
@@ -322,10 +400,14 @@ currentUser = code;
 currentName = users[code];
 
 
+
 chatLogin.style.display="none";
 
 chatRoom.style.display="block";
 
+
+
+showMembers();
 
 
 loadMessages();
@@ -351,7 +433,8 @@ chatMessage.innerHTML="کد اشتباه است";
 
 
 
-// ارسال پیام به Firebase
+
+// ارسال پیام
 
 
 sendBtn.onclick=function(){
@@ -365,22 +448,13 @@ if(text==="") return;
 
 
 
-if(currentUser===""){
-
-
-alert("ابتدا وارد چتروم شوید");
-
-return;
-
-
-}
-
-
-
 push(ref(db,"chat"),{
 
 
 name: currentName,
+
+
+user: currentUser,
 
 
 text: text,
@@ -439,15 +513,13 @@ sendBtn.click();
 
 
 
-// نمایش پیام ها از Firebase
+// نمایش پیام ها
 
 
 function loadMessages(){
 
 
-
 if(chatListenerStarted) return;
-
 
 
 chatListenerStarted=true;
@@ -468,10 +540,30 @@ let msg=item.val();
 
 
 
+let type = "";
+
+
+if(msg.user===currentUser){
+
+
+type="my-message";
+
+
+}else{
+
+
+type="other-message";
+
+
+}
+
+
+
+
 messages.innerHTML += `
 
 
-<div class="chat-message">
+<div class="chat-message ${type}">
 
 
 <div class="username">
@@ -504,7 +596,6 @@ ${msg.time}
 `;
 
 
-
 });
 
 
@@ -513,17 +604,7 @@ messages.scrollTop = messages.scrollHeight;
 
 
 
-},(error)=>{
-
-
-console.log("Firebase Error:",error);
-
-
-alert("خطا در اتصال دیتابیس");
-
-
 });
-
 
 
 }
@@ -540,16 +621,20 @@ remove(ref(db,"chat"))
 
 .then(()=>{
 
+
 messages.innerHTML="";
+
 
 })
 
 
 .catch(error=>{
 
+
 console.log(error);
 
 alert("خطا در پاک کردن چت");
+
 
 });
 
@@ -588,6 +673,7 @@ site.style.display="block";
 currentUser="";
 
 currentName="";
+
 
 
 };
