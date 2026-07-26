@@ -1,5 +1,5 @@
 // ===============================
-// Firebase Config
+// Firebase
 // ===============================
 
 import { initializeApp } from 
@@ -11,12 +11,12 @@ ref,
 set,
 onValue,
 push,
-onDisconnect,
-serverTimestamp
+onDisconnect
 } from 
 "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
 
+// تنظیمات Firebase خودت را اینجا نگه دار
 const firebaseConfig = {
 
 apiKey: "YOUR_API_KEY",
@@ -41,6 +41,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 
+
 // ===============================
 // Elements
 // ===============================
@@ -48,52 +49,60 @@ const db = getDatabase(app);
 const loginScreen =
 document.getElementById("login-screen");
 
+
 const site =
 document.getElementById("site");
+
 
 const password =
 document.getElementById("password");
 
+
 const loginBtn =
 document.getElementById("loginBtn");
 
-const membersPage =
-document.getElementById("membersPage");
 
-const chatBox =
-document.getElementById("chatBox");
+const messages =
+document.getElementById("messages");
 
-const messageInput =
-document.getElementById("messageInput");
+
+const chatText =
+document.getElementById("chatText");
+
 
 const sendBtn =
 document.getElementById("sendBtn");
 
 
-let currentUser = "";
+const membersList =
+document.getElementById("membersList");
+
+
+const exitChat =
+document.getElementById("exitChat");
+
 
 let currentName = "";
 // ===============================
-// Login System
+// Login
 // ===============================
 
-loginBtn.addEventListener("click", () => {
-
-    const pass = password.value.trim();
+loginBtn.addEventListener("click",()=>{
 
 
-    if(pass === ""){
+    const name = password.value.trim();
+
+
+    if(name === ""){
 
         alert("رمز را وارد کنید");
+
         return;
 
     }
 
 
-    // ساخت نام کاربر از رمز
-    currentUser = pass;
-
-    currentName = pass;
+    currentName = name;
 
 
     localStorage.setItem(
@@ -107,10 +116,11 @@ loginBtn.addEventListener("click", () => {
     site.style.display = "block";
 
 
-    // فعال کردن آنلاین بودن
     setOnline();
 
+
 });
+
 
 
 
@@ -120,33 +130,34 @@ loginBtn.addEventListener("click", () => {
 
 function setOnline(){
 
-    const userRef = ref(
-        db,
-        "online/" + currentName
-    );
+
+    const userRef =
+    ref(db,"online/"+currentName);
+
 
 
     set(userRef,{
 
         name: currentName,
 
-        online: true,
+        online:true,
 
-        time: new Date().toLocaleTimeString("fa-IR")
+        time:Date.now()
 
     });
 
 
-    // وقتی کاربر خارج شد
+
     onDisconnect(userRef).set({
 
         name: currentName,
 
         online:false,
 
-        time: new Date().toLocaleTimeString("fa-IR")
+        time:Date.now()
 
     });
+
 
 }
 // ===============================
@@ -156,142 +167,155 @@ function setOnline(){
 
 // ارسال پیام
 
-sendBtn.addEventListener("click", () => {
+sendBtn.addEventListener("click",()=>{
 
-    const text = messageInput.value.trim();
+
+    const text =
+    chatText.value.trim();
 
 
     if(text === "") return;
 
 
-    const messagesRef = ref(db,"messages");
+
+    const messageRef =
+    push(ref(db,"messages"));
 
 
-    const newMessage = push(messagesRef);
 
-
-    set(newMessage,{
+    set(messageRef,{
 
         name: currentName,
 
         text: text,
 
-        time: new Date().toLocaleTimeString("fa-IR")
+        time: new Date()
+        .toLocaleTimeString("fa-IR")
 
     });
 
 
-    messageInput.value = "";
+
+    chatText.value = "";
+
 
 });
 
 
 
 
+
+// ===============================
 // دریافت پیام‌ها
-
-const messagesRef = ref(db,"messages");
-
-
-onValue(messagesRef,(snapshot)=>{
+// ===============================
 
 
-    chatBox.innerHTML = "";
+onValue(ref(db,"messages"),(snapshot)=>{
+
+
+    if(!messages) return;
+
+
+    messages.innerHTML = "";
+
 
 
     snapshot.forEach((item)=>{
 
 
-        const msg = item.val();
+        const data =
+        item.val();
 
 
-        const div = document.createElement("div");
+
+        const div =
+        document.createElement("div");
+
 
 
         div.innerHTML = `
 
-        <b>${msg.name}</b>
+        <b>${data.name}</b>
 
-        :
+        : 
 
-        ${msg.text}
+        ${data.text}
 
         <small>
 
-        ${msg.time}
+        ${data.time}
 
         </small>
 
         `;
 
 
-        chatBox.appendChild(div);
+
+        messages.appendChild(div);
+
 
 
     });
 
 
-    // رفتن به آخر چت
 
-    chatBox.scrollTop = chatBox.scrollHeight;
+    messages.scrollTop =
+    messages.scrollHeight;
 
 
 });
 // ===============================
-// Online Members List
+// Online Members
 // ===============================
 
 
-const onlineList =
-document.getElementById("onlineList");
+onValue(ref(db,"online"),(snapshot)=>{
 
 
-if(onlineList){
+    if(!membersList) return;
 
 
-    const onlineRef =
-    ref(db,"online");
+    membersList.innerHTML = "";
 
 
-    onValue(onlineRef,(snapshot)=>{
+
+    snapshot.forEach((user)=>{
 
 
-        onlineList.innerHTML = "";
+        const data =
+        user.val();
 
 
-        snapshot.forEach((user)=>{
+
+        if(data.online === true){
 
 
-            const data = user.val();
+            const div =
+            document.createElement("div");
 
 
-            if(data.online === true){
+
+            div.innerHTML = `
+
+            🟢 ${data.name}
+
+            `;
 
 
-                const div =
-                document.createElement("div");
+
+            membersList.appendChild(div);
 
 
-                div.innerHTML = `
+        }
 
-                🟢 ${data.name}
-
-                `;
-
-
-                onlineList.appendChild(div);
-
-
-            }
-
-
-        });
 
 
     });
 
 
-}
+
+});
+
 
 
 
@@ -301,49 +325,48 @@ if(onlineList){
 // ===============================
 
 
-const exitBtn =
-document.getElementById("exitBtn");
+if(exitChat){
 
 
-if(exitBtn){
+exitChat.addEventListener("click",()=>{
 
 
-    exitBtn.addEventListener("click",()=>{
+    if(currentName){
 
 
-        if(currentName){
+        set(
+        ref(db,"online/"+currentName),
+        {
+
+            name: currentName,
+
+            online:false,
+
+            time:Date.now()
+
+        });
 
 
-            set(
-                ref(db,"online/"+currentName),
-                {
-
-                name:currentName,
-
-                online:false,
-
-                time:new Date().toLocaleTimeString("fa-IR")
-
-                }
-            );
+    }
 
 
-        }
+
+    localStorage.removeItem("username");
 
 
-        localStorage.removeItem("username");
+
+    site.style.display="none";
 
 
-        site.style.display="none";
+
+    loginScreen.style.display="flex";
 
 
-        loginScreen.style.display="flex";
+
+    password.value="";
 
 
-        password.value="";
 
-
-    });
-
+});
 
 }
