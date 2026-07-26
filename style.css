@@ -473,4 +473,38 @@ button{
     margin-right:5px;
 
     }
-    
+    /* پیام خود کاربر */
+.my-message {
+    border: 2px solid #00ff66;
+    box-shadow: 0 0 15px #00ff66;
+    margin-right: 20px;
+    background: #061b0d;
+}
+
+
+/* پیام دیگران */
+.other-message {
+    border: 2px solid #00ffff;
+    box-shadow: 0 0 15px #00ffff;
+    margin-left: 20px;
+    background: #06151b;
+}
+
+
+/* اسم مدیر */
+.username {
+    font-weight: bold;
+}
+
+
+/* لیست اعضا */
+#membersList {
+    padding: 10px;
+    color: white;
+    font-size: 20px;
+}
+
+
+.member-item {
+    margin: 5px;
+    }
