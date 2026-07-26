@@ -42,6 +42,7 @@ const db = getDatabase(app);
 const PASSWORD = "_mamad_13900_";
 
 
+// ورود اصلی
 
 const loginScreen = document.getElementById("login-screen");
 const site = document.getElementById("site");
@@ -54,12 +55,14 @@ const message = document.getElementById("message");
 const countdown = document.getElementById("countdown");
 
 
+// اعضا
 
 const membersPage = document.getElementById("membersPage");
 const membersBtn = document.getElementById("membersBtn");
 const backBtn = document.getElementById("backBtn");
 
 
+// چتروم
 
 const chatBtn = document.getElementById("chatBtn");
 const chatLogin = document.getElementById("chatLogin");
@@ -90,12 +93,16 @@ chatRoom.style.display="none";
 let attempts = 0;
 let locked = false;
 
+
 let currentUser = "";
 let currentName = "";
+
 
 let chatListenerStarted = false;
 
 
+
+// کاربران
 
 const users = {
 
@@ -133,6 +140,7 @@ toggle.innerHTML="👁";
 
 
 
+
 password.addEventListener("keydown",function(e){
 
 if(e.key==="Enter"){
@@ -152,7 +160,9 @@ loginBtn.onclick=login;
 
 function login(){
 
+
 if(locked)return;
+
 
 
 if(password.value===PASSWORD){
@@ -164,6 +174,7 @@ message.innerHTML="در حال ورود...";
 
 
 setTimeout(()=>{
+
 
 loginScreen.style.display="none";
 
@@ -179,6 +190,7 @@ site.style.display="block";
 
 attempts++;
 
+
 message.style.color="red";
 
 message.innerHTML="رمز اشتباه است";
@@ -193,6 +205,7 @@ if(attempts>=3){
 
 locked=true;
 
+
 loginBtn.disabled=true;
 
 password.disabled=true;
@@ -200,6 +213,7 @@ password.disabled=true;
 
 
 let sec=30;
+
 
 
 countdown.innerHTML="تلاش دوباره: "+sec;
@@ -285,7 +299,7 @@ site.style.display="block";
 
 
 
-// باز کردن ورود چتروم
+// ورود به چتروم
 
 
 chatBtn.onclick=function(){
@@ -304,51 +318,61 @@ chatLogin.style.display="flex";
 
 
 
-// نمایش اعضا و وضعیت آنلاین
+// نمایش اعضا با وضعیت آنلاین
+
 
 function showMembers(){
+
 
 if(!membersList) return;
 
 
+
+onValue(ref(db,"members"),(memberSnap)=>{
+
+
+let allMembers = memberSnap.val() || {};
+
+
+
+onValue(ref(db,"online"),(onlineSnap)=>{
+
+
+let onlineUsers = onlineSnap.val() || {};
+
+
+
 membersList.innerHTML = `
-<h3>👥 اعضای LA3</h3>
+
+<h3>
+👥 اعضای LA3
+</h3>
+
 `;
-
-
-onValue(ref(db,"online"),(snapshot)=>{
-
-
-let onlineUsers = snapshot.val() || {};
 
 
 
 for(let code in users){
 
 
-let status = onlineUsers[code] ? "🟢 آنلاین" : "⚫ آفلاین";
+let name = users[code];
 
 
-let old = document.getElementById("member-"+code);
+let status = onlineUsers[code]
+? "🟢 آنلاین"
+: "⚫ آفلاین";
 
 
-let html = `
-<div class="member-item" id="member-${code}">
-${status} - ${users[code]}
+
+membersList.innerHTML += `
+
+<div class="member-item">
+
+${status} - ${name}
+
 </div>
+
 `;
-
-
-
-if(old){
-
-old.innerHTML = `${status} - ${users[code]}`;
-
-}else{
-
-membersList.innerHTML += html;
-
-}
 
 
 
@@ -358,6 +382,10 @@ membersList.innerHTML += html;
 
 });
 
+
+});
+
+
 }
 
 
@@ -367,7 +395,8 @@ membersList.innerHTML += html;
 
 
 
-// ورود کاربر به چتروم
+
+// ورود کاربر چتروم
 
 
 chatEnter.onclick=function(){
@@ -386,13 +415,28 @@ currentName = users[code];
 
 
 
+// ذخیره دائمی عضو
+
+set(ref(db,"members/"+currentUser),{
+
+
+name: currentName
+
+
+});
+
+
+
+
 // ثبت آنلاین بودن
 
-const userStatus = ref(db,"online/"+currentUser);
+
+const onlineRef = ref(db,"online/"+currentUser);
 
 
 
-set(userStatus,{
+set(onlineRef,{
+
 
 name: currentName,
 
@@ -400,13 +444,16 @@ online:true,
 
 time:new Date().toLocaleTimeString("fa-IR")
 
+
 });
 
 
 
-// اگر اینترنت قطع شد یا صفحه بسته شد
+// حذف خودکار هنگام قطع اتصال
 
-onDisconnect(userStatus).remove();
+onDisconnect(onlineRef).remove();
+
+
 
 
 
@@ -417,6 +464,7 @@ chatRoom.style.display="block";
 
 
 showMembers();
+
 
 loadMessages();
 
@@ -441,6 +489,7 @@ sendBtn.onclick=function(){
 
 
 let text = chatText.value.trim();
+
 
 
 if(text==="") return;
@@ -472,10 +521,13 @@ alert("خطا در ارسال پیام");
 });
 
 
+
 chatText.value="";
 
 
 };
+
+
 
 
 
@@ -499,6 +551,7 @@ sendBtn.click();
 
 
 });
+
 
 
 
@@ -533,6 +586,7 @@ snapshot.forEach((item)=>{
 let msg=item.val();
 
 
+
 let type="";
 
 
@@ -553,6 +607,8 @@ type="other-message";
 
 
 
+
+
 messages.innerHTML += `
 
 
@@ -566,6 +622,7 @@ ${msg.name}
 </div>
 
 
+
 <div class="text">
 
 ${msg.text}
@@ -573,11 +630,13 @@ ${msg.text}
 </div>
 
 
+
 <div class="time">
 
 ${msg.time}
 
 </div>
+
 
 
 </div>
@@ -592,6 +651,7 @@ ${msg.time}
 
 
 messages.scrollTop = messages.scrollHeight;
+
 
 
 });
@@ -613,7 +673,9 @@ messages.scrollTop = messages.scrollHeight;
 clearChat.onclick=function(){
 
 
+
 if(currentUser==="modir12131213"){
+
 
 
 remove(ref(db,"chat"))
@@ -636,6 +698,7 @@ alert("خطا در پاک کردن چت");
 
 
 });
+
 
 
 }else{
@@ -667,7 +730,7 @@ exitChat.onclick=function(){
 if(currentUser){
 
 
-// آفلاین کردن کاربر هنگام خروج
+// فقط وضعیت آنلاین پاک می‌شود
 
 remove(ref(db,"online/"+currentUser));
 
@@ -678,6 +741,7 @@ remove(ref(db,"online/"+currentUser));
 
 chatRoom.style.display="none";
 
+
 site.style.display="block";
 
 
@@ -687,7 +751,9 @@ currentUser="";
 currentName="";
 
 
+
 };
+
 
 
 
