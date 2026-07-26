@@ -1,3 +1,24 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBM5zOgIQKSG7_zQJ_L7taB0CQGjYWRSVA",
+  authDomain: "la3chat.firebaseapp.com",
+  databaseURL: "https://la3chat-default-rtdb.firebaseio.com",
+  projectId: "la3chat",
+  storageBucket: "la3chat.firebasestorage.app",
+  messagingSenderId: "831502350386",
+  appId: "1:831502350386:web:944a347e3b7656ea60242b",
+  measurementId: "G-0LCL5N0KPL"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+
+
 const PASSWORD = "_mamad_13900_";
 
 
@@ -56,19 +77,17 @@ let currentName = "";
 
 const users = {
 
-    "ali5678":"سید علی اصغر",
+"ali5678":"سید علی اصغر",
 
-    "z4321":"طاها زالی",
+"z4321":"طاها زالی",
 
-    "ms9675":"سید علی موسوی",
+"ms9675":"سید علی موسوی",
 
-    "sa9988":"امیر مهدی",
+"sa9988":"امیر مهدی",
 
-    "modir12131213":"محمد (مدیر)"
+"modir12131213":"محمد (مدیر)"
 
 };
-
-
 
 
 
@@ -76,32 +95,29 @@ const users = {
 
 toggle.onclick=function(){
 
-    if(password.type==="password"){
+if(password.type==="password"){
 
-        password.type="text";
-        toggle.innerHTML="🙈";
+password.type="text";
+toggle.innerHTML="🙈";
 
-    }else{
+}else{
 
-        password.type="password";
-        toggle.innerHTML="👁";
+password.type="password";
+toggle.innerHTML="👁";
 
-    }
+}
 
 };
 
 
 
-
-
 password.addEventListener("keydown",function(e){
 
-    if(e.key==="Enter"){
-        login();
-    }
+if(e.key==="Enter"){
+login();
+}
 
 });
-
 
 
 loginBtn.onclick=login;
@@ -110,96 +126,89 @@ loginBtn.onclick=login;
 
 function login(){
 
-
-    if(locked)return;
-
-
-    if(password.value===PASSWORD){
+if(locked)return;
 
 
-        message.style.color="#00ff66";
-        message.innerHTML="در حال ورود...";
+if(password.value===PASSWORD){
 
 
-        setTimeout(()=>{
+message.style.color="#00ff66";
+message.innerHTML="در حال ورود...";
 
 
-            loginScreen.style.display="none";
-            site.style.display="block";
+setTimeout(()=>{
+
+loginScreen.style.display="none";
+site.style.display="block";
+
+},1200);
 
 
-        },1200);
+}else{
 
 
+attempts++;
 
-    }else{
+message.style.color="red";
+message.innerHTML="رمز اشتباه است";
 
-
-        attempts++;
-
-        message.style.color="red";
-        message.innerHTML="رمز اشتباه است";
-
-        password.value="";
+password.value="";
 
 
-        if(attempts>=3){
+if(attempts>=3){
 
-            locked=true;
-            loginBtn.disabled=true;
-            password.disabled=true;
+locked=true;
 
-
-            let sec=30;
+loginBtn.disabled=true;
+password.disabled=true;
 
 
-            countdown.innerHTML="تلاش دوباره: "+sec;
+let sec=30;
 
 
-            let timer=setInterval(()=>{
+countdown.innerHTML="تلاش دوباره: "+sec;
 
 
-                sec--;
-
-                countdown.innerHTML="تلاش دوباره: "+sec;
+let timer=setInterval(()=>{
 
 
-                if(sec<=0){
+sec--;
 
-                    clearInterval(timer);
-
-                    attempts=0;
-                    locked=false;
-
-                    loginBtn.disabled=false;
-                    password.disabled=false;
-
-                    countdown.innerHTML="";
-                    message.innerHTML="";
-
-                }
+countdown.innerHTML="تلاش دوباره: "+sec;
 
 
-            },1000);
+if(sec<=0){
 
+clearInterval(timer);
 
-        }
+attempts=0;
+locked=false;
 
-    }
+loginBtn.disabled=false;
+password.disabled=false;
+
+countdown.innerHTML="";
+message.innerHTML="";
 
 }
 
 
+},1000);
 
 
+}
 
+
+}
+
+}
 // صفحه اعضا
 
 
 membersBtn.onclick=function(){
 
-    site.style.display="none";
-    membersPage.style.display="block";
+site.style.display="none";
+membersPage.style.display="block";
 
 };
 
@@ -207,8 +216,8 @@ membersBtn.onclick=function(){
 
 backBtn.onclick=function(){
 
-    membersPage.style.display="none";
-    site.style.display="block";
+membersPage.style.display="none";
+site.style.display="block";
 
 };
 
@@ -223,8 +232,8 @@ backBtn.onclick=function(){
 
 chatBtn.onclick=function(){
 
-    site.style.display="none";
-    chatLogin.style.display="flex";
+site.style.display="none";
+chatLogin.style.display="flex";
 
 };
 
@@ -235,31 +244,31 @@ chatBtn.onclick=function(){
 chatEnter.onclick=function(){
 
 
-    let code=chatCode.value;
+let code=chatCode.value;
 
 
-    if(users[code]){
+if(users[code]){
 
 
-        currentUser=code;
-        currentName=users[code];
+currentUser=code;
+currentName=users[code];
 
 
-        chatLogin.style.display="none";
-        chatRoom.style.display="block";
+chatLogin.style.display="none";
+chatRoom.style.display="block";
 
 
-        loadMessages();
+loadMessages();
 
 
-    }else{
+}else{
 
 
-        chatMessage.style.color="red";
-        chatMessage.innerHTML="کد اشتباه است";
+chatMessage.style.color="red";
+chatMessage.innerHTML="کد اشتباه است";
 
 
-    }
+}
 
 
 };
@@ -270,45 +279,38 @@ chatEnter.onclick=function(){
 
 
 
-// ارسال پیام
+// ارسال پیام به Firebase
 
 
 sendBtn.onclick=function(){
 
 
-    let text=chatText.value.trim();
+let text=chatText.value.trim();
 
 
-    if(text==="")return;
-
-
-
-    let data={
-
-        name:currentName,
-
-        text:text,
-
-        time:new Date().toLocaleTimeString("fa-IR")
-
-    };
+if(text==="") return;
 
 
 
-    let old=JSON.parse(localStorage.getItem("chat")) || [];
+let data={
+
+name:currentName,
+
+text:text,
+
+time:new Date().toLocaleTimeString("fa-IR")
+
+};
 
 
-    old.push(data);
+
+// ذخیره در دیتابیس
+
+push(ref(db,"chat"),data);
 
 
-    localStorage.setItem("chat",JSON.stringify(old));
 
-
-
-    chatText.value="";
-
-
-    loadMessages();
+chatText.value="";
 
 
 };
@@ -319,48 +321,65 @@ sendBtn.onclick=function(){
 
 
 
-// نمایش پیام ها
+// نمایش پیام ها از Firebase
 
 
 function loadMessages(){
 
 
-    messages.innerHTML="";
+onValue(ref(db,"chat"),(snapshot)=>{
 
 
-    let data=JSON.parse(localStorage.getItem("chat")) || [];
+messages.innerHTML="";
 
 
 
-    data.forEach(msg=>{
+snapshot.forEach((item)=>{
 
 
-        messages.innerHTML += `
-
-        <div class="chat-message">
-
-        <div class="username">
-        ${msg.name}
-        </div>
+let msg=item.val();
 
 
-        <div class="text">
-        ${msg.text}
-        </div>
+
+messages.innerHTML += `
+
+<div class="chat-message">
 
 
-        <div class="time">
-        ${msg.time}
-        </div>
+<div class="username">
+
+${msg.name}
+
+</div>
 
 
-        </div>
 
-        `;
+<div class="text">
+
+${msg.text}
+
+</div>
 
 
-    });
 
+<div class="time">
+
+${msg.time}
+
+</div>
+
+
+</div>
+
+`;
+
+
+
+});
+
+
+
+});
 
 
 }
@@ -377,21 +396,19 @@ function loadMessages(){
 clearChat.onclick=function(){
 
 
-    if(currentUser==="modir12131213"){
+if(currentUser==="modir12131213"){
 
 
-        localStorage.removeItem("chat");
-
-        loadMessages();
+remove(ref(db,"chat"));
 
 
-    }else{
+}else{
 
 
-        alert("فقط مدیر اجازه پاک کردن دارد");
+alert("فقط مدیر اجازه پاک کردن دارد");
 
 
-    }
+}
 
 
 };
@@ -408,9 +425,9 @@ clearChat.onclick=function(){
 exitChat.onclick=function(){
 
 
-    chatRoom.style.display="none";
+chatRoom.style.display="none";
 
-    site.style.display="block";
+site.style.display="block";
 
 
 };
@@ -424,6 +441,6 @@ exitChat.onclick=function(){
 
 document.addEventListener("contextmenu",function(e){
 
-    e.preventDefault();
+e.preventDefault();
 
 });
