@@ -1,6 +1,7 @@
 // ===============================
 // LA3 Cyber Security
 // Final Fixed Script
+// Chat Fixed Version
 // Part 1
 // ===============================
 
@@ -42,7 +43,6 @@ appId:"1:831502350386:web:944a347e3b7656ea60242b"
 };
 
 
-
 const app = initializeApp(firebaseConfig);
 
 const db = getDatabase(app);
@@ -50,7 +50,7 @@ const db = getDatabase(app);
 
 
 // ===============================
-// Elements Safe
+// Elements
 // ===============================
 
 
@@ -90,8 +90,6 @@ const chatRoom = document.getElementById("chatRoom");
 
 const currentUser = document.getElementById("currentUser");
 
-const membersList = document.getElementById("membersList");
-
 
 const messages = document.getElementById("messages");
 
@@ -106,21 +104,14 @@ const exitChat = document.getElementById("exitChat");
 
 
 // ===============================
-// Password
+// Variables
 // ===============================
 
 
 const PASSWORD = "_mamad_13900_";
 
 
-
-// ===============================
-// Users Codes
-// ===============================
-
-
 const users = {
-
 
 "ali5678":"سید علی اصغر",
 
@@ -132,12 +123,10 @@ const users = {
 
 "modir12131213":"محمد"
 
-
 };
 
 
-
-let username = "";
+let username = localStorage.getItem("LA3user") || "";
 
 let isAdmin = false;
 // ===============================
@@ -163,9 +152,8 @@ chatRoom.style.display="none";
 
 
 
-
 // ===============================
-// Show / Hide Password
+// Password Toggle
 // ===============================
 
 
@@ -216,7 +204,6 @@ if(password.value===PASSWORD){
 message.innerText="ورود موفق ✅";
 
 
-
 setTimeout(()=>{
 
 
@@ -239,7 +226,6 @@ else{
 
 message.innerText="رمز اشتباه است ❌";
 
-
 password.value="";
 
 
@@ -251,7 +237,6 @@ password.value="";
 
 
 }
-
 
 
 
@@ -270,7 +255,6 @@ membersBtn.onclick=()=>{
 
 site.style.display="none";
 
-
 membersPage.style.display="block";
 
 
@@ -278,7 +262,6 @@ membersPage.style.display="block";
 
 
 }
-
 
 
 
@@ -290,7 +273,6 @@ backBtn.onclick=()=>{
 
 membersPage.style.display="none";
 
-
 site.style.display="block";
 
 
@@ -298,8 +280,6 @@ site.style.display="block";
 
 
 }
-
-
 
 
 
@@ -318,7 +298,6 @@ chatBtn.onclick=()=>{
 
 site.style.display="none";
 
-
 chatLogin.style.display="flex";
 
 
@@ -332,7 +311,7 @@ chatLogin.style.display="flex";
 
 
 // ===============================
-// Enter Chat With Code
+// Enter Chat
 // ===============================
 
 
@@ -349,7 +328,6 @@ let code = chatCode.value.trim();
 if(users[code]){
 
 
-
 username = users[code];
 
 
@@ -364,47 +342,36 @@ username
 
 
 
-
 chatLogin.style.display="none";
 
-
 chatRoom.style.display="block";
-
 
 
 
 if(currentUser){
 
 currentUser.innerText =
-"کاربر وارد شده: "+username;
+"کاربر وارد شده: " + username;
 
 }
-
-
 
 
 
 if(clearChat){
 
-
 if(isAdmin){
 
 clearChat.style.display="inline-block";
-
 
 }
 
 else{
 
-
 clearChat.style.display="none";
 
-
 }
 
-
 }
-
 
 
 
@@ -430,15 +397,16 @@ chatMessage.innerText =
 };
 
 
- // ===============================
-// Send Message
+}
+// ===============================
+// Send Message Fixed
 // ===============================
 
 
 if(sendBtn){
 
 
-sendBtn.onclick=()=>{
+sendBtn.onclick = ()=>{
 
 
 let text = chatText.value.trim();
@@ -450,23 +418,45 @@ return;
 
 
 
+if(username===""){
+
+alert("ابتدا وارد چت شوید ❌");
+
+return;
+
+}
+
+
+
 push(
 ref(db,"messages"),
 {
 
 name: username,
 
-text:text,
+text: text,
 
-time:Date.now()
+time: Date.now()
 
 }
 
-);
-
+)
+.then(()=>{
 
 
 chatText.value="";
+
+
+})
+.catch((error)=>{
+
+
+console.log(error);
+
+alert("خطا در ارسال پیام ❌");
+
+
+});
 
 
 };
@@ -478,10 +468,8 @@ chatText.value="";
 
 
 
-
-
 // ===============================
-// Load Messages
+// Load Messages Fixed
 // ===============================
 
 
@@ -505,11 +493,16 @@ messages.innerHTML="";
 snapshot.forEach((item)=>{
 
 
-let data=item.val();
+let data = item.val();
 
 
 
-let div=document.createElement("div");
+if(!data)
+return;
+
+
+
+let div = document.createElement("div");
 
 
 
@@ -532,7 +525,7 @@ div.classList.add("other-message");
 
 
 
-div.innerHTML=`
+div.innerHTML = `
 
 <div class="username">
 ${data.name || "کاربر"}
@@ -540,7 +533,7 @@ ${data.name || "کاربر"}
 
 
 <div class="text">
-${data.text}
+${data.text || ""}
 </div>
 
 
@@ -576,43 +569,45 @@ messages.scrollHeight;
 
 
 
-
-
 // ===============================
-// Online User Display
+// Enter Key Send
 // ===============================
 
 
-if(membersList){
+if(chatText){
 
 
-membersList.innerHTML =
-`
-<div class="member-item">
-🟢 ${username}
-</div>
-`;
+chatText.addEventListener(
+"keydown",
+(e)=>{
 
+
+if(e.key==="Enter"){
+
+
+if(sendBtn)
+
+sendBtn.click();
 
 
 }
 
 
+}
+
+);
 
 
-
-
-
-
+}
 // ===============================
-// Clear Chat (Admin)
+// Clear Chat Admin
 // ===============================
 
 
 if(clearChat){
 
 
-clearChat.onclick=()=>{
+clearChat.onclick = ()=>{
 
 
 if(isAdmin){
@@ -620,11 +615,20 @@ if(isAdmin){
 
 remove(
 ref(db,"messages")
-);
+)
+.then(()=>{
+
+alert("همه پیام‌ها پاک شد ✅");
+
+})
+.catch((error)=>{
+
+console.log(error);
+
+});
 
 
 }
-
 
 else{
 
@@ -645,22 +649,36 @@ alert("فقط مدیر اجازه دارد ❌");
 
 
 
-
 // ===============================
-// Exit Chat
+// Exit Chat Fixed
 // ===============================
 
 
 if(exitChat){
 
 
-exitChat.onclick=()=>{
+exitChat.onclick = ()=>{
 
+
+if(chatRoom)
 
 chatRoom.style.display="none";
 
 
+if(site)
+
 site.style.display="block";
+
+
+
+username="";
+
+
+isAdmin=false;
+
+
+localStorage.removeItem("LA3user");
+
 
 
 };
@@ -672,35 +690,16 @@ site.style.display="block";
 
 
 
-
 // ===============================
-// Enter Send
+// Auto Login Saved User
 // ===============================
 
 
-if(chatText){
+if(username && currentUser){
 
 
-chatText.addEventListener(
-"keydown",
-(e)=>{
-
-
-if(e.key==="Enter"){
-
-
-if(sendBtn)
-
-sendBtn.click();
-
+currentUser.innerText =
+"کاربر وارد شده: " + username;
 
 
 }
-
-
-}
-
-);
-
-
-  }                                           }
