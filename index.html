@@ -2,267 +2,62 @@
 <html lang="fa" dir="rtl">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LA3 Cyber Security</title>
 
-<title>LA3 Cyber Security</title>
-
-<link rel="stylesheet" href="style.css">
-
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
 </head>
-
 
 <body>
 
-
-<!-- ورود اصلی -->
-
-<div id="login-screen">
+<div class="bg"></div>
 
 <div class="login-box">
 
-<h2>ورود به سیستم</h2>
+    <img src="assets/logo.png" class="logo" alt="LA3">
 
+    <h1>LA3 Cyber Security</h1>
 
-<input 
-type="password"
-id="password"
-placeholder="رمز عبور">
+    <p class="subtitle">
+        ورود به چت گروهی
+    </p>
 
+    <div class="input-group">
 
-<button id="toggle">
-نمایش / مخفی
-</button>
+        <label>کد کاربری</label>
 
+        <input
+            type="text"
+            id="userCode"
+            placeholder="مثال : LA301"
+            autocomplete="off">
 
-<button id="loginBtn">
-ورود
-</button>
+    </div>
 
+    <div class="input-group">
 
-<p id="message"></p>
+        <label>PIN</label>
 
-<p id="countdown"></p>
+        <input
+            type="password"
+            id="pin"
+            maxlength="6"
+            placeholder="******">
 
+    </div>
 
-</div>
+    <button id="loginBtn">
+        ورود
+    </button>
 
-</div>
-
-
-
-
-
-<!-- سایت اصلی -->
-
-<div id="site">
-
-
-<header>
-
-<h1>
-LA3 Cyber Security
-</h1>
-
-</header>
-
-
-
-<main>
-
-<h2>
-خوش آمدید
-</h2>
-
-
-<button id="membersBtn">
-اعضا تیم
-</button>
-
-
-<button id="chatBtn">
-💬 چتروم
-</button>
-
-
-</main>
-
+    <p id="loginStatus"></p>
 
 </div>
 
-
-
-
-
-
-<!-- صفحه اعضا -->
-
-<div id="membersPage">
-
-
-<h2>
-اعضا تیم
-</h2>
-
-
-<table>
-
-
-<tr>
-<th>
-نام اعضا
-</th>
-</tr>
-
-
-<tr>
-<td>سید علی اصغر</td>
-</tr>
-
-
-<tr>
-<td>سید علی موسوی</td>
-</tr>
-
-
-<tr>
-<td>محمد</td>
-</tr>
-
-
-<tr>
-<td>طاها زالی</td>
-</tr>
-
-
-<tr>
-<td>سعدی</td>
-</tr>
-
-
-</table>
-
-
-
-<button id="backBtn">
-بازگشت
-</button>
-
-
-</div>
-
-
-
-
-
-
-
-
-<!-- ورود چتروم -->
-
-
-<div id="chatLogin">
-
-
-<div class="login-box">
-
-
-<h2>
-ورود به چتروم
-</h2>
-
-
-
-<input
-type="password"
-id="chatCode"
-placeholder="کد کاربری">
-
-
-<button id="chatEnter">
-ورود
-</button>
-
-
-<p id="chatMessage"></p>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-<!-- چتروم -->
-
-
-<div id="chatRoom">
-
-
-<h2>
-💬 چتروم LA3
-</h2>
-
-
-<!-- نمایش نام کاربر -->
-
-<div id="currentUser"></div>
-
-
-
-<!-- اعضای آنلاین -->
-
-<div id="membersList"></div>
-
-
-
-<!-- پیام ها -->
-
-<div id="messages"></div>
-
-
-
-
-<input
-id="chatText"
-placeholder="پیام خود را بنویسید">
-
-
-
-<button id="sendBtn">
-ارسال
-</button>
-
-
-
-<button id="clearChat">
-پاک کردن تاریخچه
-</button>
-
-
-
-<button id="exitChat">
-خروج
-</button>
-
-
-
-</div>
-
-
-
-
-
-
-
-<script type="module" src="script.js"></script>
-
+<script type="module" src="js/firebase.js"></script>
+<script type="module" src="js/auth.js"></script>
 
 </body>
-
-</html>
+          </html>
