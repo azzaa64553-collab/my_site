@@ -5,16 +5,14 @@
 // Part 1
 // ===============================
 
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 
-
 import {
-getDatabase,
-ref,
-push,
-onValue,
-remove
+    getDatabase,
+    ref,
+    push,
+    onValue,
+    remove
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
 
@@ -22,28 +20,17 @@ remove
 // Firebase
 // ===============================
 
-
 const firebaseConfig = {
-
-apiKey: "AIzaSyBM5OgIQKSG7_zQJ_L7taB0CQGjYWRSVA",
-
-authDomain: "la3chat.firebaseapp.com",
-
-databaseURL:"https://la3chat-default-rtdb.firebaseio.com",
-
-projectId:"la3chat",
-
-storageBucket:"la3chat.firebasestorage.app",
-
-messagingSenderId:"831502350386",
-
-appId:"1:831502350386:web:944a347e3b7656ea60242b"
-
+    apiKey: "AIzaSyBM5OgIQKSG7_zQJ_L7taB0CQGjYWRSVA",
+    authDomain: "la3chat.firebaseapp.com",
+    databaseURL: "https://la3chat-default-rtdb.firebaseio.com",
+    projectId: "la3chat",
+    storageBucket: "la3chat.firebasestorage.app",
+    messagingSenderId: "831502350386",
+    appId: "1:831502350386:web:944a347e3b7656ea60242b"
 };
 
-
 const app = initializeApp(firebaseConfig);
-
 const db = getDatabase(app);
 
 
@@ -51,50 +38,29 @@ const db = getDatabase(app);
 // Elements
 // ===============================
 
-
 const loginScreen = document.getElementById("login-screen");
-
 const password = document.getElementById("password");
-
 const toggle = document.getElementById("toggle");
-
 const loginBtn = document.getElementById("loginBtn");
-
 const message = document.getElementById("message");
 
-
 const site = document.getElementById("site");
-
 const membersBtn = document.getElementById("membersBtn");
-
 const membersPage = document.getElementById("membersPage");
-
 const backBtn = document.getElementById("backBtn");
 
-
 const chatBtn = document.getElementById("chatBtn");
-
 const chatLogin = document.getElementById("chatLogin");
-
 const chatCode = document.getElementById("chatCode");
-
 const chatEnter = document.getElementById("chatEnter");
-
 const chatMessage = document.getElementById("chatMessage");
 
-
 const chatRoom = document.getElementById("chatRoom");
-
 const currentUser = document.getElementById("currentUser");
-
 const messages = document.getElementById("messages");
-
 const chatText = document.getElementById("chatText");
-
 const sendBtn = document.getElementById("sendBtn");
-
 const clearChat = document.getElementById("clearChat");
-
 const exitChat = document.getElementById("exitChat");
 
 
@@ -102,488 +68,284 @@ const exitChat = document.getElementById("exitChat");
 // Variables
 // ===============================
 
-
 const PASSWORD = "_mamad_13900_";
 
-
 const users = {
-
-"ali5678":"سید علی اصغر",
-
-"ms9675":"سید علی موسوی",
-
-"z4321":"طاها زالی",
-
-"sa9988":"سعدی",
-
-"modir12131213":"محمد"
-
+    "ali5678": "سید علی اصغر",
+    "ms9675": "سید علی موسوی",
+    "z4321": "طاها زالی",
+    "sa9988": "سعدی",
+    "modir12131213": "محمد"
 };
 
-
-let username = localStorage.getItem("LA3user") || "";
-
+// مهم: دیگر از localStorage برای مقدار اولیه استفاده نمی‌کنیم
+let username = "";
+let currentCode = "";
 let isAdmin = false;
+
+
 // ===============================
 // Initial State
 // ===============================
 
-
-if(site)
-site.style.display="none";
-
-
-if(membersPage)
-membersPage.style.display="none";
-
-
-if(chatLogin)
-chatLogin.style.display="none";
-
-
-if(chatRoom)
-chatRoom.style.display="none";
-
-
-
-
-// ===============================
-// Password Toggle
-// ===============================
-
-
-if(toggle){
-
-toggle.onclick=()=>{
-
-
-if(password.type==="password"){
-
-password.type="text";
-
-toggle.innerText="مخفی";
-
-}
-
-else{
-
-password.type="password";
-
-toggle.innerText="نمایش";
-
-}
-
-
-};
-
-}
-
-
-
-
-
-// ===============================
-// Main Login
-// ===============================
-
-
-if(loginBtn){
-
-
-loginBtn.onclick=()=>{
-
-
-if(password.value===PASSWORD){
-
-
-message.innerText="ورود موفق ✅";
-
-
-setTimeout(()=>{
-
-
-if(loginScreen)
-loginScreen.style.display="none";
-
-
-if(site)
-site.style.display="block";
-
-
-},500);
-
-
-
-}
-
-else{
-
-
-message.innerText="رمز اشتباه است ❌";
-
-
-password.value="";
-
-
-}
-
-
-
-};
-
-
-}
-
-
-
-
-
+if (site) site.style.display = "none";
+if (membersPage) membersPage.style.display = "none";
+if (chatLogin) chatLogin.style.display = "none";
+if (chatRoom) chatRoom.style.display = "none";
 // ===============================
 // Open Chat
 // ===============================
 
+if (chatBtn) {
 
-if(chatBtn){
+    chatBtn.onclick = () => {
 
+        if (site) site.style.display = "none";
+        if (chatLogin) chatLogin.style.display = "flex";
 
-chatBtn.onclick=()=>{
+        if (chatMessage) chatMessage.innerText = "";
+        if (chatCode) chatCode.value = "";
 
-
-site.style.display="none";
-
-
-chatLogin.style.display="flex";
-
-
-};
-
+    };
 
 }
-
-
-
 
 
 // ===============================
-// Enter Chat
+// Enter Chat (Fixed)
 // ===============================
 
+if (chatEnter) {
 
-if(chatEnter){
+    chatEnter.onclick = () => {
 
+        const code = chatCode.value.trim();
 
-chatEnter.onclick=()=>{
+        if (!users.hasOwnProperty(code)) {
 
+            if (chatMessage) {
+                chatMessage.innerText = "کد اشتباه است ❌";
+            }
 
-let code = chatCode.value.trim();
+            return;
+        }
 
+        currentCode = code;
+        username = users[code];
+        isAdmin = (code === "modir12131213");
 
+        localStorage.setItem("LA3user", username);
+        localStorage.setItem("LA3code", code);
 
-if(users[code]){
+        if (chatLogin) chatLogin.style.display = "none";
+        if (chatRoom) chatRoom.style.display = "block";
 
+        if (currentUser) {
+            currentUser.innerText = "کاربر وارد شده: " + username;
+        }
 
-username = users[code];
+        if (clearChat) {
+            clearChat.style.display = isAdmin ? "inline-block" : "none";
+        }
 
+        if (chatText) {
+            chatText.value = "";
+            chatText.focus();
+        }
 
-isAdmin = (code==="modir12131213");
+        if (chatMessage) {
+            chatMessage.innerText = "";
+        }
 
+        loadMessages();
 
+    };
 
-localStorage.setItem(
-"LA3user",
-username
-);
-
-
-
-chatLogin.style.display="none";
-
-
-chatRoom.style.display="block";
-
-
-
-if(currentUser){
-
-currentUser.innerText =
-"کاربر وارد شده: " + username;
-
-}
-
-
-
-if(clearChat){
-
-if(isAdmin){
-
-clearChat.style.display="inline-block";
-
-}
-
-else{
-
-clearChat.style.display="none";
-
-}
-
-}
-
-
-
-loadMessages();
-
-
-
-}
-
-else{
-
-
-if(chatMessage)
-
-chatMessage.innerText =
-"کد اشتباه است ❌";
-
-
-}
-
-
-
-}
-}
+    }
 // ===============================
-// Send Message Fixed
+// Send Message (Completely Fixed)
 // ===============================
 
+async function sendMessage() {
 
-if(sendBtn){
+    if (!chatText) return;
+    if (!sendBtn) return;
 
+    const text = chatText.value.trim();
 
-sendBtn.onclick = ()=>{
+    if (text === "") {
+        chatText.focus();
+        return;
+    }
 
+    if (!username || !currentCode) {
+        alert("ابتدا وارد چت شوید ❌");
+        return;
+    }
 
-let text = chatText.value.trim();
+    sendBtn.disabled = true;
 
+    try {
 
+        await push(ref(db, "messages"), {
+            name: username,
+            code: currentCode,
+            text: text,
+            time: Date.now()
+        });
 
-if(text === "")
-return;
+        chatText.value = "";
+        chatText.focus();
 
+    } catch (error) {
 
+        console.error("Firebase Error:", error);
 
-if(username === ""){
+        alert("خطا در ارسال پیام:\n" + error.message);
 
-alert("ابتدا وارد چت شوید ❌");
+    } finally {
 
-return;
+        sendBtn.disabled = false;
 
-}
-
-
-
-push(ref(db,"messages"),{
-
-name: username,
-
-text: text,
-
-time: Date.now()
-
-})
-
-.then(()=>{
-
-
-chatText.value="";
-
-
-})
-
-.catch((error)=>{
-
-
-alert("خطا در ارسال پیام: " + error.message);
-
-console.log(error);
-
-
-});
-
-
-};
-
+    }
 
 }
 
 
+// فقط یکبار رویدادها ثبت شوند
+
+if (sendBtn) {
+
+    sendBtn.replaceWith(sendBtn.cloneNode(true));
+
+    const newSendBtn = document.getElementById("sendBtn");
+
+    newSendBtn.addEventListener("click", sendMessage);
+
+}
 
 
+if (chatText) {
 
+    chatText.addEventListener("keydown", (e) => {
+
+        if (e.key === "Enter") {
+
+            e.preventDefault();
+
+            sendMessage();
+
+        }
+
+    });
+
+      }
 // ===============================
-// Load Messages
+// Load Messages (Fixed)
 // ===============================
 
+let chatListenerStarted = false;
 
-function loadMessages(){
+function loadMessages() {
 
+    if (!messages) return;
 
-if(!messages)
-return;
+    if (chatListenerStarted) return;
 
+    chatListenerStarted = true;
 
+    onValue(ref(db, "messages"), (snapshot) => {
 
-onValue(
-ref(db,"messages"),
-(snapshot)=>{
+        messages.innerHTML = "";
 
+        if (!snapshot.exists()) return;
 
-messages.innerHTML="";
+        snapshot.forEach((item) => {
 
+            const data = item.val();
 
+            if (!data) return;
 
-snapshot.forEach((item)=>{
+            const div = document.createElement("div");
 
+            div.className = "chat-message";
 
-let data=item.val();
+            if (data.code === currentCode) {
+                div.classList.add("my-message");
+            } else {
+                div.classList.add("other-message");
+            }
 
+            div.innerHTML = `
+                <div class="username">${data.name ?? "کاربر"}</div>
+                <div class="text">${data.text ?? ""}</div>
+                <div class="time">${new Date(data.time).toLocaleString("fa-IR")}</div>
+            `;
 
+            messages.appendChild(div);
 
-if(!data)
-return;
+        });
 
+        messages.scrollTop = messages.scrollHeight;
 
-
-let div=document.createElement("div");
-
-
-
-div.className="chat-message";
-
-
-
-if(data.name===username){
-
-div.classList.add("my-message");
-
-}
-
-else{
-
-div.classList.add("other-message");
+    });
 
 }
-
-
-
-div.innerHTML=`
-
-<div class="username">
-${data.name || "کاربر"}
-</div>
-
-<div class="text">
-${data.text || ""}
-</div>
-
-<div class="time">
-${new Date(data.time).toLocaleString("fa-IR")}
-</div>
-
-`;
-
-
-
-messages.appendChild(div);
-
-
-
-});
-
-
-
-messages.scrollTop =
-messages.scrollHeight;
-
-
-
-}
-
-);
-
-
-}
-
-
-
 
 
 // ===============================
-// Clear Chat Admin
+// Clear Chat
 // ===============================
 
+if (clearChat) {
 
-if(clearChat){
+    clearChat.onclick = async () => {
 
+        if (!isAdmin) {
 
-clearChat.onclick=()=>{
+            alert("فقط مدیر اجازه حذف چت را دارد ❌");
+            return;
 
+        }
 
-if(isAdmin){
+        if (!confirm("همه پیام‌ها حذف شوند؟")) return;
 
+        try {
 
-remove(
-ref(db,"messages")
-);
+            await remove(ref(db, "messages"));
 
+        } catch (err) {
 
-}
+            console.error(err);
+            alert(err.message);
 
-else{
+        }
 
-
-alert("فقط مدیر اجازه دارد ❌");
-
-
-}
-
-
-
-};
-
+    };
 
 }
-
-
-
 
 
 // ===============================
 // Exit Chat
 // ===============================
 
+if (exitChat) {
 
-if(exitChat){
+    exitChat.onclick = () => {
 
+        if (chatRoom) chatRoom.style.display = "none";
+        if (site) site.style.display = "block";
 
-exitChat.onclick=()=>{
+        username = "";
+        currentCode = "";
+        isAdmin = false;
 
+        if (chatText) chatText.value = "";
 
-chatRoom.style.display="none";
+        localStorage.removeItem("LA3user");
+        localStorage.removeItem("LA3code");
 
+    };
 
-site.style.display="block";
-
-
-username="";
-
-
-isAdmin=false;
-
-
-localStorage.removeItem("LA3user");
-
-
-};
-
-
-  }
+}
