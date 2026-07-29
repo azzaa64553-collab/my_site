@@ -358,9 +358,9 @@ chatMessage.innerText =
 
 if(sendBtn){
 
-
 sendBtn.onclick = ()=>{
 
+alert("دکمه ارسال اجرا شد");
 
 let text = chatText.value.trim();
 
