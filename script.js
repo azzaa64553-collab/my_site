@@ -383,28 +383,29 @@ return;
 
 push(ref(db,"messages"),{
 
-name: username,
+    name: username,
 
-text: text,
+    text: text,
 
-time: Date.now()
+    time: Date.now()
 
 })
 
 .then(()=>{
 
+    alert("پیام داخل Firebase ذخیره شد");
 
-chatText.value="";
-
+    chatText.value="";
 
 })
 
 .catch((error)=>{
 
+    alert("خطا: " + error.message);
 
-alert("خطا در ارسال پیام: " + error.message);
+    console.error(error);
 
-console.log(error);
+});
 
 
 });
