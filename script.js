@@ -70,6 +70,16 @@ function loadImages(){
 
         img.src = data.url;
 
+
+        // باز کردن عکس بزرگ با کلیک
+
+        img.onclick = function(){
+
+            window.open(data.url, "_blank");
+
+        };
+
+
         gallery.appendChild(img);
 
 
@@ -77,6 +87,5 @@ function loadImages(){
 
 
  });
-
 
 }
