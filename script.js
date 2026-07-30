@@ -80,3 +80,6 @@ function loadImages(){
 
 
 }
+img.onclick = function(){
+    window.open(data.url, "_blank");
+};
