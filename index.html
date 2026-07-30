@@ -1,63 +1,47 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LA3 Cyber Security</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/login.css">
+<title>LA3 Gallery</title>
+
+<link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-<div class="bg"></div>
+<div class="box">
 
-<div class="login-box">
+<h1>LA3 Gallery</h1>
 
-    <img src="assets/logo.png" class="logo" alt="LA3">
+<div id="loginBox">
 
-    <h1>LA3 Cyber Security</h1>
+<input id="viewPassword" type="password" placeholder="رمز مشاهده عکس‌ها">
 
-    <p class="subtitle">
-        ورود به چت گروهی
-    </p>
+<button onclick="checkPassword()">
+ورود
+</button>
 
-    <div class="input-group">
-
-        <label>کد کاربری</label>
-
-        <input
-            type="text"
-            id="userCode"
-            placeholder="مثال : LA301"
-            autocomplete="off">
-
-    </div>
-
-    <div class="input-group">
-
-        <label>PIN</label>
-
-        <input
-            type="password"
-            id="pin"
-            maxlength="6"
-            placeholder="******">
-
-    </div>
-
-    <button id="loginBtn">
-        ورود
-    </button>
-
-    <p id="loginStatus"></p>
+<p id="error"></p>
 
 </div>
 
-<script type="module" src="js/firebase.js"></script>
-<script type="module" src="js/auth.js"></script>
+
+<div id="galleryBox" style="display:none;">
+
+<h2>گالری تصاویر</h2>
+
+<div id="gallery"></div>
+
+</div>
+
+
+</div>
+
+
+<script type="module" src="script.js"></script>
 
 </body>
-          </html>
+</html>
