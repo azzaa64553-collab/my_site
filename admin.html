@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LA3 Admin</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="box">
+
+
+<h1>پنل مدیر</h1>
+
+
+<div id="adminLogin">
+
+<input 
+type="password" 
+id="adminPassword" 
+placeholder="رمز مدیر">
+
+
+<button onclick="adminLogin()">
+ورود مدیر
+</button>
+
+
+<p id="adminError"></p>
+
+
+</div>
+
+
+
+<div id="uploadBox" style="display:none;">
+
+
+<h2>آپلود عکس</h2>
+
+
+<input 
+type="file" 
+id="imageFile"
+accept="image/*">
+
+
+<button onclick="uploadImage()">
+آپلود
+</button>
+
+
+<p id="status"></p>
+
+
+</div>
+
+
+
+</div>
+
+
+<script type="module" src="admin.js"></script>
+
+
+</body>
+
+                                       </html>
