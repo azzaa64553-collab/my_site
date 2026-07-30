@@ -66,20 +66,48 @@ function loadImages(){
         let data = child.val();
 
 
-        let img = document.createElement("img");
+      let img = document.createElement("img");
 
-        img.src = data.url;
+img.src = data.url;
 
-        gallery.appendChild(img);
+img.onclick = function(){
+    window.open(data.url, "_blank");
+};
+
+gallery.appendChild(img);
 
 
     });
 
 
  });
-
-
-}
 img.onclick = function(){
-    window.open(data.url, "_blank");
+
+    let box = document.createElement("div");
+
+    box.style.position = "fixed";
+    box.style.top = "0";
+    box.style.left = "0";
+    box.style.width = "100%";
+    box.style.height = "100%";
+    box.style.background = "rgba(0,0,0,0.9)";
+    box.style.display = "flex";
+    box.style.alignItems = "center";
+    box.style.justifyContent = "center";
+    box.style.zIndex = "9999";
+
+    let bigImg = document.createElement("img");
+
+    bigImg.src = data.url;
+    bigImg.style.maxWidth = "95%";
+    bigImg.style.maxHeight = "95%";
+    bigImg.style.borderRadius = "15px";
+
+    box.appendChild(bigImg);
+
+    box.onclick = function(){
+        box.remove();
+    };
+
+    document.body.appendChild(box);
 };
